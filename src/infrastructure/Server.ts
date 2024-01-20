@@ -25,7 +25,7 @@ export class Server {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    app.get('/', (req, res) => res.send('Channel service is running'));
+    app.get('/test', (req, res) => res.send('Channel service is running'));
 
     app.get('/verifyUser', (req, res) => {
       controllers.verifyUserController.handle(req, res);

@@ -1,22 +1,29 @@
 import { DeletePost } from '../../application/use-cases/DeletePost';
+import { SaveChannel } from '../../application/use-cases/SaveChannel';
 import SavePost from '../../application/use-cases/SavePost';
 import SaveUser from '../../application/use-cases/SaveUser';
 import kafka from '../../infrastructure/brokers/kafka/config';
+import { ChannelRepository } from '../../infrastructure/repositories/ChannelRepository';
 import { PostRepository } from '../../infrastructure/repositories/PostRepository';
 import { UserRepository } from '../../infrastructure/repositories/UserRepository';
 
-const consumer = kafka.consumer({ groupId: 'threads-consumer-group' });
+const consumer = kafka.consumer({ groupId: 'channel-consumer-group' });
 
 const run = async () => {
   await consumer.connect();
   await consumer.subscribe({ topic: 'user-register-topic' });
   await consumer.subscribe({ topic: 'post-create-topic' });
   await consumer.subscribe({ topic: 'post-delete-topic' });
+
   const userRepository = new UserRepository();
   const postRepository = new PostRepository();
+  const channelRepository = new ChannelRepository();
+
   const saveUser = new SaveUser(userRepository);
   const savePost = new SavePost(postRepository, userRepository);
   const deletePost = new DeletePost(postRepository);
+
+  const saveChannel = new SaveChannel(channelRepository);
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
@@ -49,6 +56,25 @@ const run = async () => {
           console.error(savePostResult);
           return;
         }
+
+        const { tags } = postData;
+
+        tags.map(async (tag: string) => {
+          const channelData = {
+            name: tag,
+            description: '',
+            categories: [],
+            similar: [],
+            followerCount: 0,
+          };
+
+          const saveChannelResult = await saveChannel.execute(channelData);
+
+          if (saveChannelResult instanceof Error) {
+            console.error(saveChannelResult);
+            return;
+          }
+        });
       } else if (topic === 'post-delete-topic') {
         const slug = JSON.parse(message?.value?.toString());
 

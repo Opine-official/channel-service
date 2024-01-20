@@ -1,7 +1,7 @@
 import { VerifyUser } from './src/application/use-cases/VerifyUser';
 import { DatabaseConnection } from './src/infrastructure/database/Connection';
 import { Server } from './src/infrastructure/Server';
-import run from './src/presentation/consumers/ThreadsConsumer';
+import run from './src/presentation/consumers/ChannelConsumer';
 import { VerifyUserController } from './src/presentation/controllers/VerifyUserController';
 
 export async function main(): Promise<void> {
