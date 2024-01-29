@@ -5,4 +5,5 @@ export interface IChannelRepository {
   delete(channelId: string): Promise<void | Error>;
   // getChannels(): Promise<Error | Channel[]>;
   // getChannelById(channelId: string): Promise<Error | Channel>;
+  getChannelIds(channelIds: string[]): Promise<string[] | Error>;
 }

@@ -3,6 +3,7 @@ import { SaveChannel } from '../../application/use-cases/SaveChannel';
 import SavePost from '../../application/use-cases/SavePost';
 import SaveUser from '../../application/use-cases/SaveUser';
 import kafka from '../../infrastructure/brokers/kafka/config';
+import { CategoryRepository } from '../../infrastructure/repositories/CategoryRepository';
 import { ChannelRepository } from '../../infrastructure/repositories/ChannelRepository';
 import { PostRepository } from '../../infrastructure/repositories/PostRepository';
 import { UserRepository } from '../../infrastructure/repositories/UserRepository';
@@ -18,12 +19,13 @@ const run = async () => {
   const userRepository = new UserRepository();
   const postRepository = new PostRepository();
   const channelRepository = new ChannelRepository();
+  const categoryRepository = new CategoryRepository();
 
   const saveUser = new SaveUser(userRepository);
   const savePost = new SavePost(postRepository, userRepository);
   const deletePost = new DeletePost(postRepository);
 
-  const saveChannel = new SaveChannel(channelRepository);
+  const saveChannel = new SaveChannel(channelRepository, categoryRepository);
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {

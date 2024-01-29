@@ -2,9 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import { VerifyUserController } from '../presentation/controllers/VerifyUserController';
 import cookieParser from 'cookie-parser';
+import { SaveCategoryController } from '../presentation/controllers/SaveCategoryController';
+import { SaveChannelController } from '../presentation/controllers/SaveChannelController';
+import { authenticateToken } from '@opine-official/authentication';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
+  saveCategoryController: SaveCategoryController;
+  saveChannelController: SaveChannelController;
 }
 
 const corsOptions = {
@@ -29,6 +34,14 @@ export class Server {
 
     app.get('/verifyUser', (req, res) => {
       controllers.verifyUserController.handle(req, res);
+    });
+
+    app.post('/', authenticateToken, (req, res) => {
+      controllers.saveChannelController.handle(req, res);
+    });
+
+    app.post('/category', (req, res) => {
+      controllers.saveCategoryController.handle(req, res);
     });
 
     app.listen(port, () => {

@@ -10,7 +10,6 @@ export class ChannelRepository implements IChannelRepository {
         name: channel.name,
         description: channel.description,
         categories: channel.categories,
-        similar: channel.similar,
         followerCount: channel.followerCount,
       });
 
@@ -34,6 +33,22 @@ export class ChannelRepository implements IChannelRepository {
       }
 
       return new Error('Something went wrong while deleting');
+    }
+  }
+
+  public async getChannelIds(channelIds: string[]): Promise<string[] | Error> {
+    try {
+      const channels = await ChannelModel.find({
+        channelId: { $in: channelIds },
+      });
+
+      return channels.map((channel) => channel._id.toString());
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching channels');
     }
   }
 
