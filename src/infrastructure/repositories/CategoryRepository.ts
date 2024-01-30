@@ -121,6 +121,24 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
+  public async deleteChannelFromCategory(
+    categoryId: string,
+    channelId: string,
+  ): Promise<void | Error> {
+    try {
+      await CategoryModel.updateOne(
+        { categoryId: categoryId },
+        { $pull: { channels: channelId } },
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while deleting');
+    }
+  }
+
   public async getChannelsByCategory(
     categoryId: string,
   ): Promise<ChannelInfo[] | Error> {

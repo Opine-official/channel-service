@@ -1,3 +1,4 @@
+import { DeleteChannelFromCategory } from './src/application/use-cases/DeleteChannelFromCategory';
 import { GetCategories } from './src/application/use-cases/GetCategories';
 import { GetCategory } from './src/application/use-cases/GetCategory';
 import { GetChannelsByCategory } from './src/application/use-cases/GetChannelsByCategory';
@@ -11,6 +12,7 @@ import { CategoryRepository } from './src/infrastructure/repositories/CategoryRe
 import { ChannelRepository } from './src/infrastructure/repositories/ChannelRepository';
 import { Server } from './src/infrastructure/Server';
 import run from './src/presentation/consumers/ChannelConsumer';
+import { DeleteChannelFromCategoryController } from './src/presentation/controllers/DeleteChannelFromCategoryController';
 import { GetCategoriesController } from './src/presentation/controllers/GetCategoriesController';
 import { GetCategoryController } from './src/presentation/controllers/GetCategoryController';
 import { GetChannelsBySearchTermController } from './src/presentation/controllers/GetChannelBySearchTermController';
@@ -34,6 +36,10 @@ export async function main(): Promise<void> {
   const getChannelsBySearchTerm = new GetChannelsBySearchTerm(channelRepo);
   const getCategories = new GetCategories(categoryRepo);
   const getChannelsByCategory = new GetChannelsByCategory(categoryRepo);
+  const deleteChannelFromCategory = new DeleteChannelFromCategory(
+    categoryRepo,
+    channelRepo,
+  );
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -46,6 +52,8 @@ export async function main(): Promise<void> {
     getChannelsByCategory,
   );
   const updateCategoryController = new UpdateCategoryController(updateCategory);
+  const deleteChannelFromCategoryController =
+    new DeleteChannelFromCategoryController(deleteChannelFromCategory);
 
   run();
 
@@ -58,6 +66,7 @@ export async function main(): Promise<void> {
     getCategoriesController,
     getChannelsByCategoryController,
     updateCategoryController,
+    deleteChannelFromCategoryController,
   });
 }
 

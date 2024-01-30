@@ -96,7 +96,27 @@ export class ChannelRepository implements IChannelRepository {
         return new Error(error.message);
       }
 
-      return new Error('Something went wrong while updating');
+      return new Error('Something went wrong while adding category to channel');
+    }
+  }
+
+  public async deleteCategoryFromChannel(
+    channelId: string,
+    categoryId: string,
+  ): Promise<void | Error> {
+    try {
+      await ChannelModel.updateOne(
+        { channelId: channelId },
+        { $pull: { categories: categoryId } },
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error(
+        'Something went wrong while delete category from channel',
+      );
     }
   }
 }

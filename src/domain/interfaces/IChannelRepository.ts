@@ -9,4 +9,8 @@ export interface IChannelRepository {
     channelId: string,
     categoryId: string,
   ): Promise<void | Error>;
+  deleteCategoryFromChannel(
+    channelId: string,
+    categoryId: string,
+  ): Promise<void | Error>;
 }

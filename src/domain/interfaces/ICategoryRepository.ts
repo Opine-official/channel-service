@@ -13,4 +13,8 @@ export interface ICategoryRepository {
   getCategories(): Promise<Error | Category[]>;
   getCategoryIds(categoryIds: string[]): Promise<string[] | Error>;
   getChannelsByCategory(categoryId: string): Promise<ChannelInfo[] | Error>;
+  deleteChannelFromCategory(
+    categoryId: string,
+    channelId: string,
+  ): Promise<void | Error>;
 }
