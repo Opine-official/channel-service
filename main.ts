@@ -1,4 +1,5 @@
 import { GetCategories } from './src/application/use-cases/GetCategories';
+import { GetChannelsByCategory } from './src/application/use-cases/GetChannelsByCategory';
 import { GetChannelsBySearchTerm } from './src/application/use-cases/GetChannelsBySearchTerm';
 import { SaveCategory } from './src/application/use-cases/SaveCategory';
 import { SaveChannel } from './src/application/use-cases/SaveChannel';
@@ -10,6 +11,7 @@ import { Server } from './src/infrastructure/Server';
 import run from './src/presentation/consumers/ChannelConsumer';
 import { GetCategoriesController } from './src/presentation/controllers/GetCategoriesController';
 import { GetChannelsBySearchTermController } from './src/presentation/controllers/GetChannelBySearchTermController';
+import { GetChannelsByCategoryController } from './src/presentation/controllers/GetChannelsByCategoryController';
 import { SaveCategoryController } from './src/presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from './src/presentation/controllers/SaveChannelController';
 import { VerifyUserController } from './src/presentation/controllers/VerifyUserController';
@@ -25,6 +27,7 @@ export async function main(): Promise<void> {
   const saveChannel = new SaveChannel(channelRepo, categoryRepo);
   const getChannelsBySearchTerm = new GetChannelsBySearchTerm(channelRepo);
   const getCategories = new GetCategories(categoryRepo);
+  const getChannelsByCategory = new GetChannelsByCategory(categoryRepo);
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -32,6 +35,9 @@ export async function main(): Promise<void> {
   const getChannelsBySearchTermController =
     new GetChannelsBySearchTermController(getChannelsBySearchTerm);
   const getCategoriesController = new GetCategoriesController(getCategories);
+  const getChannelsByCategoryController = new GetChannelsByCategoryController(
+    getChannelsByCategory,
+  );
 
   run();
 
@@ -41,6 +47,7 @@ export async function main(): Promise<void> {
     saveChannelController,
     getChannelsBySearchTermController,
     getCategoriesController,
+    getChannelsByCategoryController,
   });
 }
 

@@ -1,4 +1,7 @@
-import { ICategoryRepository } from '../../domain/interfaces/ICategoryRepository';
+import {
+  ChannelInfo,
+  ICategoryRepository,
+} from '../../domain/interfaces/ICategoryRepository';
 import { Category } from '../../domain/entities/Category';
 import CategoryModel from '../models/CategoryModel';
 
@@ -71,6 +74,32 @@ export class CategoryRepository implements ICategoryRepository {
       }
 
       return new Error('Something went wrong while fetching categories');
+    }
+  }
+
+  public async getChannelsByCategory(
+    categoryId: string,
+  ): Promise<ChannelInfo[] | Error> {
+    try {
+      const category = await CategoryModel.findOne({
+        categoryId: categoryId,
+      }).populate({
+        path: 'channels',
+        select: 'channelId name -_id',
+      });
+      if (!category) {
+        throw new Error('Category not found');
+      }
+      return (category.channels as unknown as ChannelInfo[]).map((channel) => ({
+        channelId: channel.channelId,
+        name: channel.name,
+      }));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching channels');
     }
   }
 }

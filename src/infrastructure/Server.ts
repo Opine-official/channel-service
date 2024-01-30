@@ -7,6 +7,7 @@ import { SaveChannelController } from '../presentation/controllers/SaveChannelCo
 import { authenticateToken } from '@opine-official/authentication';
 import { GetChannelsBySearchTermController } from '../presentation/controllers/GetChannelBySearchTermController';
 import { GetCategoriesController } from '../presentation/controllers/GetCategoriesController';
+import { GetChannelsByCategoryController } from '../presentation/controllers/GetChannelsByCategoryController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -14,6 +15,7 @@ interface ServerControllers {
   saveChannelController: SaveChannelController;
   getChannelsBySearchTermController: GetChannelsBySearchTermController;
   getCategoriesController: GetCategoriesController;
+  getChannelsByCategoryController: GetChannelsByCategoryController;
 }
 
 const corsOptions = {
@@ -55,6 +57,10 @@ export class Server {
     // need admin verification
     app.get('/categories', (req, res) => {
       controllers.getCategoriesController.handle(req, res);
+    });
+
+    app.get('/channelsByCategory', (req, res) => {
+      controllers.getChannelsByCategoryController.handle(req, res);
     });
 
     app.listen(port, () => {
