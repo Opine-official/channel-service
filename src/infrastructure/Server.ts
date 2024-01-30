@@ -5,11 +5,15 @@ import cookieParser from 'cookie-parser';
 import { SaveCategoryController } from '../presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from '../presentation/controllers/SaveChannelController';
 import { authenticateToken } from '@opine-official/authentication';
+import { GetChannelsBySearchTermController } from '../presentation/controllers/GetChannelBySearchTermController';
+import { GetCategoriesController } from '../presentation/controllers/GetCategoriesController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
   saveCategoryController: SaveCategoryController;
   saveChannelController: SaveChannelController;
+  getChannelsBySearchTermController: GetChannelsBySearchTermController;
+  getCategoriesController: GetCategoriesController;
 }
 
 const corsOptions = {
@@ -36,12 +40,21 @@ export class Server {
       controllers.verifyUserController.handle(req, res);
     });
 
-    app.post('/', authenticateToken, (req, res) => {
-      controllers.saveChannelController.handle(req, res);
-    });
+    app
+      .post('/', authenticateToken, (req, res) => {
+        controllers.saveChannelController.handle(req, res);
+      })
+      .get('/', (req, res) => {
+        controllers.getChannelsBySearchTermController.handle(req, res);
+      });
 
     app.post('/category', (req, res) => {
       controllers.saveCategoryController.handle(req, res);
+    });
+
+    // need admin verification
+    app.get('/categories', (req, res) => {
+      controllers.getCategoriesController.handle(req, res);
     });
 
     app.listen(port, () => {

@@ -53,23 +53,24 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
-  // public async getCategories(): Promise<Error | Category[]> {
-  //   try {
-  //     const categories = await CategoryModel.find();
-  //     return categories.map((category) => ({
-  //       categoryId: category.categoryId,
-  //       name: category.name,
-  //       description: category.description,
-  //       channels: category.channels,
-  //     }));
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       return new Error(error.message);
-  //     }
+  public async getCategories(): Promise<Error | Category[]> {
+    try {
+      const categories = await CategoryModel.find();
 
-  //     return new Error('Something went wrong while fetching categories');
-  //   }
-  // }
+      return categories.map((category) => ({
+        categoryId: category.categoryId,
+        name: category.name,
+        description: category.description ?? '',
+        channels: category.channels
+          ? category.channels.map((channel) => channel.toString())
+          : [],
+      }));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
 
-  // public async getCategoryById(categoryId: string): Promise<Error | Category> {
+      return new Error('Something went wrong while fetching categories');
+    }
+  }
 }
