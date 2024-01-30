@@ -1,8 +1,37 @@
-import { IChannelRepository } from '../../domain/interfaces/IChannelRepository';
+import {
+  CategoryInfo,
+  IChannelRepository,
+} from '../../domain/interfaces/IChannelRepository';
 import { Channel } from '../../domain/entities/Channel';
 import ChannelModel from '../models/ChannelModel';
 
 export class ChannelRepository implements IChannelRepository {
+  public async get(channelId: string): Promise<Error | Channel> {
+    try {
+      const channelDocument = await ChannelModel.findOne({
+        channelId: channelId,
+      });
+
+      if (!channelDocument) {
+        throw new Error('Channel not found');
+      }
+
+      return {
+        channelId: channelDocument.channelId,
+        name: channelDocument.name,
+        description: channelDocument.description ?? '',
+        categories:
+          channelDocument.categories.map((cat) => cat.toString()) ?? [],
+        followerCount: channelDocument.followerCount,
+      };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+      return new Error('Something went wrong while getting');
+    }
+  }
+
   public async save(channel: Channel): Promise<void | Error> {
     try {
       const channelDocument = new ChannelModel({
@@ -22,6 +51,25 @@ export class ChannelRepository implements IChannelRepository {
     }
   }
 
+  public async update(channel: Channel): Promise<void | Error> {
+    try {
+      const channelDocument = new ChannelModel({
+        channelId: channel.channelId,
+        name: channel.name,
+        description: channel.description,
+        categories: channel.categories,
+        followerCount: channel.followerCount,
+      });
+
+      await channelDocument.save();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+      return new Error('Something went wrong while updating');
+    }
+  }
+
   public async delete(channelId: string): Promise<void | Error> {
     try {
       await ChannelModel.deleteOne({
@@ -36,6 +84,28 @@ export class ChannelRepository implements IChannelRepository {
     }
   }
 
+  public async getChannels(): Promise<Error | Channel[]> {
+    try {
+      const channels = await ChannelModel.find();
+
+      return channels.map((channel) => ({
+        channelId: channel.channelId,
+        name: channel.name,
+        description: channel.description ?? '',
+        categories: channel.categories
+          ? channel.categories.map((category) => category.toString())
+          : [],
+        followerCount: channel.followerCount,
+      }));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching channels');
+    }
+  }
+
   public async getChannelIds(channelIds: string[]): Promise<string[] | Error> {
     try {
       const channels = await ChannelModel.find({
@@ -43,6 +113,36 @@ export class ChannelRepository implements IChannelRepository {
       });
 
       return channels.map((channel) => channel._id.toString());
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching channels');
+    }
+  }
+
+  public async getCategoriesByChannel(
+    channelId: string,
+  ): Promise<CategoryInfo[] | Error> {
+    try {
+      const channels = await ChannelModel.findOne({
+        channelId: channelId,
+      }).populate({
+        path: 'categories',
+        select: 'categoryId name -_id',
+      });
+
+      if (!channels) {
+        throw new Error('Channel not found');
+      }
+
+      return (channels.categories as unknown as CategoryInfo[]).map(
+        (category) => ({
+          categoryId: category.categoryId,
+          name: category.name,
+        }),
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         return new Error(error.message);
