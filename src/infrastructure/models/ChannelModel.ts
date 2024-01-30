@@ -10,6 +10,7 @@ const ChannelSchema = new Schema({
   followerCount: {
     type: Number,
     default: 0,
+    required: true,
   },
 });
 

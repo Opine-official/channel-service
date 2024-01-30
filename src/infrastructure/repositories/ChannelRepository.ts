@@ -52,50 +52,33 @@ export class ChannelRepository implements IChannelRepository {
     }
   }
 
-  // public async getChannels(): Promise<Error | Channel[]> {
-  //   try {
-  //     const channels = await ChannelModel.find();
-  //     return channels.map((channel) => ({
-  //       channelId: channel.channelId,
-  //       name: channel.name,
-  //       description: channel.description,
-  //       categories: channel.categories,
-  //       similar: channel.similar,
-  //       followerCount: channel.followerCount,
-  //     }));
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       return new Error(error.message);
-  //     }
+  public async getChannelsBySearchTerm(
+    searchTerm: string,
+  ): Promise<Channel[] | Error> {
+    try {
+      const channels = await ChannelModel.find({
+        name: { $regex: searchTerm, $options: 'i' },
+      }).select('channelId name description categories followerCount');
 
-  //     return new Error('Something went wrong while fetching channels');
-  //   }
-  // }
+      const newChannels = channels.map((channel) => {
+        return new Channel({
+          channelId: channel.channelId,
+          name: channel.name,
+          description: channel.description ?? '',
+          categories: channel.categories
+            ? channel.categories.map((category) => category.toString())
+            : [],
+          followerCount: channel.followerCount,
+        });
+      });
 
-  // public async getChannelById(channelId: string): Promise<Error | Channel> {
-  //   try {
-  //     const channel = await ChannelModel.findOne({
-  //       channelId: channelId,
-  //     });
+      return newChannels;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
 
-  //     if (!channel) {
-  //       return new Error('Channel not found');
-  //     }
-
-  //     return {
-  //       channelId: channel.channelId,
-  //       name: channel.name,
-  //       description: channel.description,
-  //       categories: channel.categories,
-  //       similar: channel.similar,
-  //       followerCount: channel.followerCount,
-  //     };
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       return new Error(error.message);
-  //     }
-
-  //     return new Error('Something went wrong while fetching channel');
-  //   }
-  // }
+      return new Error('Something went wrong while fetching channels');
+    }
+  }
 }
