@@ -24,6 +24,32 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
+  public async get(categoryId: string): Promise<Error | Category> {
+    try {
+      const categoryDocument = await CategoryModel.findOne({
+        categoryId: categoryId,
+      });
+
+      if (!categoryDocument) {
+        throw new Error('Category not found');
+      }
+
+      return {
+        categoryId: categoryDocument.categoryId,
+        name: categoryDocument.name,
+        description: categoryDocument.description ?? '',
+        channels:
+          categoryDocument.channels.map((chan) => chan.toString()) ?? [],
+      };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while getting');
+    }
+  }
+
   public async delete(categoryId: string): Promise<void | Error> {
     try {
       await CategoryModel.deleteOne({

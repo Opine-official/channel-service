@@ -8,10 +8,12 @@ import { authenticateToken } from '@opine-official/authentication';
 import { GetChannelsBySearchTermController } from '../presentation/controllers/GetChannelBySearchTermController';
 import { GetCategoriesController } from '../presentation/controllers/GetCategoriesController';
 import { GetChannelsByCategoryController } from '../presentation/controllers/GetChannelsByCategoryController';
+import { GetCategoryController } from '../presentation/controllers/GetCategoryController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
   saveCategoryController: SaveCategoryController;
+  getCategoryController: GetCategoryController;
   saveChannelController: SaveChannelController;
   getChannelsBySearchTermController: GetChannelsBySearchTermController;
   getCategoriesController: GetCategoriesController;
@@ -50,9 +52,13 @@ export class Server {
         controllers.getChannelsBySearchTermController.handle(req, res);
       });
 
-    app.post('/category', (req, res) => {
-      controllers.saveCategoryController.handle(req, res);
-    });
+    app
+      .get('/category', (req, res) => {
+        controllers.getCategoriesController.handle(req, res);
+      })
+      .post('/category', (req, res) => {
+        controllers.saveCategoryController.handle(req, res);
+      });
 
     // need admin verification
     app.get('/categories', (req, res) => {
