@@ -4,6 +4,7 @@ import { GetChannelsByCategory } from './src/application/use-cases/GetChannelsBy
 import { GetChannelsBySearchTerm } from './src/application/use-cases/GetChannelsBySearchTerm';
 import { SaveCategory } from './src/application/use-cases/SaveCategory';
 import { SaveChannel } from './src/application/use-cases/SaveChannel';
+import { UpdateCategory } from './src/application/use-cases/UpdateCategory';
 import { VerifyUser } from './src/application/use-cases/VerifyUser';
 import { DatabaseConnection } from './src/infrastructure/database/Connection';
 import { CategoryRepository } from './src/infrastructure/repositories/CategoryRepository';
@@ -16,6 +17,7 @@ import { GetChannelsBySearchTermController } from './src/presentation/controller
 import { GetChannelsByCategoryController } from './src/presentation/controllers/GetChannelsByCategoryController';
 import { SaveCategoryController } from './src/presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from './src/presentation/controllers/SaveChannelController';
+import { UpdateCategoryController } from './src/presentation/controllers/UpdateCategoryController';
 import { VerifyUserController } from './src/presentation/controllers/VerifyUserController';
 
 export async function main(): Promise<void> {
@@ -28,6 +30,7 @@ export async function main(): Promise<void> {
   const saveCategory = new SaveCategory(categoryRepo, channelRepo);
   const saveChannel = new SaveChannel(channelRepo, categoryRepo);
   const getCategory = new GetCategory(categoryRepo);
+  const updateCategory = new UpdateCategory(categoryRepo, channelRepo);
   const getChannelsBySearchTerm = new GetChannelsBySearchTerm(channelRepo);
   const getCategories = new GetCategories(categoryRepo);
   const getChannelsByCategory = new GetChannelsByCategory(categoryRepo);
@@ -42,6 +45,7 @@ export async function main(): Promise<void> {
   const getChannelsByCategoryController = new GetChannelsByCategoryController(
     getChannelsByCategory,
   );
+  const updateCategoryController = new UpdateCategoryController(updateCategory);
 
   run();
 
@@ -53,6 +57,7 @@ export async function main(): Promise<void> {
     getChannelsBySearchTermController,
     getCategoriesController,
     getChannelsByCategoryController,
+    updateCategoryController,
   });
 }
 

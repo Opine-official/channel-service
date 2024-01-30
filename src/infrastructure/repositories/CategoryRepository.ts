@@ -50,6 +50,24 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
+  public async update(category: Category): Promise<void | Error> {
+    try {
+      const categoryDocument = new CategoryModel({
+        categoryId: category.categoryId,
+        name: category.name,
+        description: category.description,
+        channels: category.channels,
+      });
+
+      await categoryDocument.save();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+      return new Error('Something went wrong while creating a new category');
+    }
+  }
+
   public async delete(categoryId: string): Promise<void | Error> {
     try {
       await CategoryModel.deleteOne({

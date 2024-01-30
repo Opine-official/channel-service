@@ -9,11 +9,13 @@ import { GetChannelsBySearchTermController } from '../presentation/controllers/G
 import { GetCategoriesController } from '../presentation/controllers/GetCategoriesController';
 import { GetChannelsByCategoryController } from '../presentation/controllers/GetChannelsByCategoryController';
 import { GetCategoryController } from '../presentation/controllers/GetCategoryController';
+import { UpdateCategoryController } from '../presentation/controllers/UpdateCategoryController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
   saveCategoryController: SaveCategoryController;
   getCategoryController: GetCategoryController;
+  updateCategoryController: UpdateCategoryController;
   saveChannelController: SaveChannelController;
   getChannelsBySearchTermController: GetChannelsBySearchTermController;
   getCategoriesController: GetCategoriesController;
@@ -58,6 +60,9 @@ export class Server {
       })
       .post('/category', (req, res) => {
         controllers.saveCategoryController.handle(req, res);
+      })
+      .put('/category', (req, res) => {
+        controllers.updateCategoryController.handle(req, res);
       });
 
     // need admin verification
