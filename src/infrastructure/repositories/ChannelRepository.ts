@@ -81,4 +81,22 @@ export class ChannelRepository implements IChannelRepository {
       return new Error('Something went wrong while fetching channels');
     }
   }
+
+  public async addCategoryToChannel(
+    channelId: string,
+    categoryId: string,
+  ): Promise<void | Error> {
+    try {
+      await ChannelModel.updateOne(
+        { channelId: channelId },
+        { $addToSet: { categories: categoryId } },
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while updating');
+    }
+  }
 }

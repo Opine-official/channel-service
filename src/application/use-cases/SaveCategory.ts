@@ -39,6 +39,19 @@ export class SaveCategory
     if (saveCategoryResult instanceof Error) {
       return saveCategoryResult;
     }
+    const addCategoryToChannels = await Promise.all(
+      category.channels.map((channelId) =>
+        this._channelRepo.addCategoryToChannel(category.categoryId, channelId),
+      ),
+    );
+
+    const error = addCategoryToChannels.find(
+      (result) => result instanceof Error,
+    );
+
+    if (error) {
+      return error;
+    }
 
     return {
       categoryId: category.categoryId,
