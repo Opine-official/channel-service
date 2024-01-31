@@ -1,6 +1,7 @@
 import { DeleteChannelFromCategory } from './src/application/use-cases/DeleteChannelFromCategory';
 import { GetCategories } from './src/application/use-cases/GetCategories';
 import { GetCategory } from './src/application/use-cases/GetCategory';
+import { GetChannels } from './src/application/use-cases/GetChannels';
 import { GetChannelsByCategory } from './src/application/use-cases/GetChannelsByCategory';
 import { GetChannelsBySearchTerm } from './src/application/use-cases/GetChannelsBySearchTerm';
 import { SaveCategory } from './src/application/use-cases/SaveCategory';
@@ -17,6 +18,7 @@ import { GetCategoriesController } from './src/presentation/controllers/GetCateg
 import { GetCategoryController } from './src/presentation/controllers/GetCategoryController';
 import { GetChannelsBySearchTermController } from './src/presentation/controllers/GetChannelBySearchTermController';
 import { GetChannelsByCategoryController } from './src/presentation/controllers/GetChannelsByCategoryController';
+import { GetChannelsController } from './src/presentation/controllers/GetChannelsController';
 import { SaveCategoryController } from './src/presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from './src/presentation/controllers/SaveChannelController';
 import { UpdateCategoryController } from './src/presentation/controllers/UpdateCategoryController';
@@ -40,6 +42,7 @@ export async function main(): Promise<void> {
     categoryRepo,
     channelRepo,
   );
+  const getChannels = new GetChannels(channelRepo);
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -54,6 +57,7 @@ export async function main(): Promise<void> {
   const updateCategoryController = new UpdateCategoryController(updateCategory);
   const deleteChannelFromCategoryController =
     new DeleteChannelFromCategoryController(deleteChannelFromCategory);
+  const getChannelsController = new GetChannelsController(getChannels);
 
   run();
 
@@ -67,6 +71,7 @@ export async function main(): Promise<void> {
     getChannelsByCategoryController,
     updateCategoryController,
     deleteChannelFromCategoryController,
+    getChannelsController,
   });
 }
 

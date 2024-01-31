@@ -11,12 +11,14 @@ import { GetChannelsByCategoryController } from '../presentation/controllers/Get
 import { GetCategoryController } from '../presentation/controllers/GetCategoryController';
 import { UpdateCategoryController } from '../presentation/controllers/UpdateCategoryController';
 import { DeleteChannelFromCategoryController } from '../presentation/controllers/DeleteChannelFromCategoryController';
+import { GetChannelsController } from '../presentation/controllers/GetChannelsController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
   saveCategoryController: SaveCategoryController;
   getCategoryController: GetCategoryController;
   updateCategoryController: UpdateCategoryController;
+  getChannelsController: GetChannelsController;
   deleteChannelFromCategoryController: DeleteChannelFromCategoryController;
   saveChannelController: SaveChannelController;
   getChannelsBySearchTermController: GetChannelsBySearchTermController;
@@ -74,6 +76,10 @@ export class Server {
     // need admin verification
     app.get('/categories', (req, res) => {
       controllers.getCategoriesController.handle(req, res);
+    });
+
+    app.get('/channels', (req, res) => {
+      controllers.getChannelsController.handle(req, res);
     });
 
     app.get('/channelsByCategory', (req, res) => {
