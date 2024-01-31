@@ -72,7 +72,7 @@ export class Server {
         controllers.updateCategoryController.handle(req, res);
       });
 
-    app.put('/category/channel', (req, res) => {
+    app.patch('/categories/remove-channel', (req, res) => {
       controllers.deleteChannelFromCategoryController.handle(req, res);
     });
 
