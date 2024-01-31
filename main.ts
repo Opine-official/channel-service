@@ -1,5 +1,6 @@
 import { DeleteChannelFromCategory } from './src/application/use-cases/DeleteChannelFromCategory';
 import { GetCategories } from './src/application/use-cases/GetCategories';
+import { GetCategoriesByChannel } from './src/application/use-cases/GetCategoriesByChannel';
 import { GetCategory } from './src/application/use-cases/GetCategory';
 import { GetChannels } from './src/application/use-cases/GetChannels';
 import { GetChannelsByCategory } from './src/application/use-cases/GetChannelsByCategory';
@@ -14,6 +15,7 @@ import { ChannelRepository } from './src/infrastructure/repositories/ChannelRepo
 import { Server } from './src/infrastructure/Server';
 import run from './src/presentation/consumers/ChannelConsumer';
 import { DeleteChannelFromCategoryController } from './src/presentation/controllers/DeleteChannelFromCategoryController';
+import { GetCategoriesByChannelController } from './src/presentation/controllers/GetCategoriesByChannelController';
 import { GetCategoriesController } from './src/presentation/controllers/GetCategoriesController';
 import { GetCategoryController } from './src/presentation/controllers/GetCategoryController';
 import { GetChannelsBySearchTermController } from './src/presentation/controllers/GetChannelBySearchTermController';
@@ -43,6 +45,7 @@ export async function main(): Promise<void> {
     channelRepo,
   );
   const getChannels = new GetChannels(channelRepo);
+  const getCategoriesByChannel = new GetCategoriesByChannel(channelRepo);
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -58,6 +61,9 @@ export async function main(): Promise<void> {
   const deleteChannelFromCategoryController =
     new DeleteChannelFromCategoryController(deleteChannelFromCategory);
   const getChannelsController = new GetChannelsController(getChannels);
+  const getCategoriesByChannelController = new GetCategoriesByChannelController(
+    getCategoriesByChannel,
+  );
 
   run();
 
@@ -72,6 +78,7 @@ export async function main(): Promise<void> {
     updateCategoryController,
     deleteChannelFromCategoryController,
     getChannelsController,
+    getCategoriesByChannelController,
   });
 }
 

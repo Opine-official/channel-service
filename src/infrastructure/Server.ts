@@ -12,6 +12,7 @@ import { GetCategoryController } from '../presentation/controllers/GetCategoryCo
 import { UpdateCategoryController } from '../presentation/controllers/UpdateCategoryController';
 import { DeleteChannelFromCategoryController } from '../presentation/controllers/DeleteChannelFromCategoryController';
 import { GetChannelsController } from '../presentation/controllers/GetChannelsController';
+import { GetCategoriesByChannelController } from '../presentation/controllers/GetCategoriesByChannelController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -24,6 +25,7 @@ interface ServerControllers {
   getChannelsBySearchTermController: GetChannelsBySearchTermController;
   getCategoriesController: GetCategoriesController;
   getChannelsByCategoryController: GetChannelsByCategoryController;
+  getCategoriesByChannelController: GetCategoriesByChannelController;
 }
 
 const corsOptions = {
@@ -84,6 +86,10 @@ export class Server {
 
     app.get('/channelsByCategory', (req, res) => {
       controllers.getChannelsByCategoryController.handle(req, res);
+    });
+
+    app.get('/categoriesByChannel', (req, res) => {
+      controllers.getCategoriesByChannelController.handle(req, res);
     });
 
     app.listen(port, () => {
