@@ -26,6 +26,7 @@ interface ServerControllers {
   getCategoriesController: GetCategoriesController;
   getChannelsByCategoryController: GetChannelsByCategoryController;
   getCategoriesByChannelController: GetCategoriesByChannelController;
+  deleteCategoryFromChannelController: DeleteChannelFromCategoryController;
 }
 
 const corsOptions = {
@@ -73,6 +74,10 @@ export class Server {
 
     app.put('/category/channel', (req, res) => {
       controllers.deleteChannelFromCategoryController.handle(req, res);
+    });
+
+    app.patch('/channels/remove-category', (req, res) => {
+      controllers.deleteCategoryFromChannelController.handle(req, res);
     });
 
     // need admin verification

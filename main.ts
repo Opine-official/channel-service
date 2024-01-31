@@ -46,6 +46,10 @@ export async function main(): Promise<void> {
   );
   const getChannels = new GetChannels(channelRepo);
   const getCategoriesByChannel = new GetCategoriesByChannel(channelRepo);
+  const deleteCategoryFromChannel = new DeleteChannelFromCategory(
+    categoryRepo,
+    channelRepo,
+  );
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -64,6 +68,8 @@ export async function main(): Promise<void> {
   const getCategoriesByChannelController = new GetCategoriesByChannelController(
     getCategoriesByChannel,
   );
+  const deleteCategoryFromChannelController =
+    new DeleteChannelFromCategoryController(deleteCategoryFromChannel);
 
   run();
 
@@ -79,6 +85,7 @@ export async function main(): Promise<void> {
     deleteChannelFromCategoryController,
     getChannelsController,
     getCategoriesByChannelController,
+    deleteCategoryFromChannelController,
   });
 }
 
