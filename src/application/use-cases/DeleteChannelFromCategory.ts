@@ -24,10 +24,18 @@ export class DeleteChannelFromCategory
   async execute(
     input: IDeleteChannelFromCategoryDTO,
   ): Promise<IDeleteChannelFromCategoryResult | Error> {
+    const channelMongoId = await this._channelRepo.getMongoIdFromChannelId(
+      input.channelId,
+    );
+
+    if (channelMongoId instanceof Error) {
+      return channelMongoId;
+    }
+
     const deleteChannelFromCategoryResult =
       await this._categoryRepo.deleteChannelFromCategory(
         input.categoryId,
-        input.channelId,
+        channelMongoId,
       );
 
     if (deleteChannelFromCategoryResult instanceof Error) {

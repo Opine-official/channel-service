@@ -15,6 +15,7 @@ export interface ICategoryRepository {
   getChannelsByCategory(categoryId: string): Promise<ChannelInfo[] | Error>;
   deleteChannelFromCategory(
     categoryId: string,
-    channelId: string,
+    id: string,
   ): Promise<void | Error>;
+  getMongoIdFromCategoryId(categoryId: string): Promise<string | Error>;
 }

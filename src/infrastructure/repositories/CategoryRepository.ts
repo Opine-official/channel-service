@@ -164,4 +164,24 @@ export class CategoryRepository implements ICategoryRepository {
       return new Error('Something went wrong while fetching channels');
     }
   }
+
+  public async getMongoIdFromCategoryId(
+    categoryId: string,
+  ): Promise<string | Error> {
+    try {
+      const category = await CategoryModel.findOne({
+        categoryId: categoryId,
+      });
+      if (!category) {
+        throw new Error('Category not found');
+      }
+      return category._id.toString();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching channels');
+    }
+  }
 }
