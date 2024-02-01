@@ -42,10 +42,18 @@ export class DeleteChannelFromCategory
       return deleteChannelFromCategoryResult;
     }
 
+    const categoryMongoId = await this._categoryRepo.getMongoIdFromCategoryId(
+      input.categoryId,
+    );
+
+    if (categoryMongoId instanceof Error) {
+      return categoryMongoId;
+    }
+
     const deleteCategoryFromChannelResult =
       await this._channelRepo.deleteCategoryFromChannel(
-        input.categoryId,
         input.channelId,
+        categoryMongoId,
       );
 
     if (deleteCategoryFromChannelResult instanceof Error) {
