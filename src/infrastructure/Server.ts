@@ -14,6 +14,7 @@ import { DeleteChannelFromCategoryController } from '../presentation/controllers
 import { GetChannelsController } from '../presentation/controllers/GetChannelsController';
 import { GetCategoriesByChannelController } from '../presentation/controllers/GetCategoriesByChannelController';
 import { SaveChannelSubscribeController } from '../presentation/controllers/SaveChannelSubscribeController';
+import { GetPostsByChannelController } from '../presentation/controllers/GetPostsByChannelController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -29,6 +30,7 @@ interface ServerControllers {
   getCategoriesByChannelController: GetCategoriesByChannelController;
   deleteCategoryFromChannelController: DeleteChannelFromCategoryController;
   saveChannelSubscribeController: SaveChannelSubscribeController;
+  getPostsByChannelController: GetPostsByChannelController;
 }
 
 const corsOptions = {
@@ -102,6 +104,10 @@ export class Server {
 
     app.get('/categoriesByChannel', (req, res) => {
       controllers.getCategoriesByChannelController.handle(req, res);
+    });
+
+    app.get('/postsByChannel', (req, res) => {
+      controllers.getPostsByChannelController.handle(req, res);
     });
 
     app.listen(port, () => {

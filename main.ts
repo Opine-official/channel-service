@@ -5,6 +5,7 @@ import { GetCategory } from './src/application/use-cases/GetCategory';
 import { GetChannels } from './src/application/use-cases/GetChannels';
 import { GetChannelsByCategory } from './src/application/use-cases/GetChannelsByCategory';
 import { GetChannelsBySearchTerm } from './src/application/use-cases/GetChannelsBySearchTerm';
+import { GetPostsByChannel } from './src/application/use-cases/GetPostsByChannel';
 import { SaveCategory } from './src/application/use-cases/SaveCategory';
 import { SaveChannel } from './src/application/use-cases/SaveChannel';
 import { SaveChannelSubscribe } from './src/application/use-cases/SaveChannelSubscribe';
@@ -15,6 +16,7 @@ import { DatabaseConnection } from './src/infrastructure/database/Connection';
 import { CategoryRepository } from './src/infrastructure/repositories/CategoryRepository';
 import { ChannelRepository } from './src/infrastructure/repositories/ChannelRepository';
 import { ChannelSubscribeRepository } from './src/infrastructure/repositories/ChannelSubscribeRepository';
+import { PostRepository } from './src/infrastructure/repositories/PostRepository';
 import { Server } from './src/infrastructure/Server';
 import run from './src/presentation/consumers/ChannelConsumer';
 import { DeleteChannelFromCategoryController } from './src/presentation/controllers/DeleteChannelFromCategoryController';
@@ -24,6 +26,7 @@ import { GetCategoryController } from './src/presentation/controllers/GetCategor
 import { GetChannelsBySearchTermController } from './src/presentation/controllers/GetChannelBySearchTermController';
 import { GetChannelsByCategoryController } from './src/presentation/controllers/GetChannelsByCategoryController';
 import { GetChannelsController } from './src/presentation/controllers/GetChannelsController';
+import { GetPostsByChannelController } from './src/presentation/controllers/GetPostsByChannelController';
 import { SaveCategoryController } from './src/presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from './src/presentation/controllers/SaveChannelController';
 import { SaveChannelSubscribeController } from './src/presentation/controllers/SaveChannelSubscribeController';
@@ -33,6 +36,7 @@ import { VerifyUserController } from './src/presentation/controllers/VerifyUserC
 export async function main(): Promise<void> {
   await DatabaseConnection.connect();
 
+  const postRepo = new PostRepository();
   const categoryRepo = new CategoryRepository();
   const channelRepo = new ChannelRepository();
   const channelSubscribeRepo = new ChannelSubscribeRepository();
@@ -60,6 +64,7 @@ export async function main(): Promise<void> {
     channelSubscribeRepo,
     messageProducer,
   );
+  const getPostsByChannel = new GetPostsByChannel(postRepo);
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -83,6 +88,9 @@ export async function main(): Promise<void> {
   const saveChannelSubscribeController = new SaveChannelSubscribeController(
     saveChannelSubscribe,
   );
+  const getPostsByChannelController = new GetPostsByChannelController(
+    getPostsByChannel,
+  );
 
   run();
 
@@ -100,6 +108,7 @@ export async function main(): Promise<void> {
     getCategoriesByChannelController,
     deleteCategoryFromChannelController,
     saveChannelSubscribeController,
+    getPostsByChannelController,
   });
 }
 
