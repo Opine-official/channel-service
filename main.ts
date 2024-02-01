@@ -10,6 +10,7 @@ import { SaveChannel } from './src/application/use-cases/SaveChannel';
 import { SaveChannelSubscribe } from './src/application/use-cases/SaveChannelSubscribe';
 import { UpdateCategory } from './src/application/use-cases/UpdateCategory';
 import { VerifyUser } from './src/application/use-cases/VerifyUser';
+import { KafkaMessageProducer } from './src/infrastructure/brokers/kafka/KafkaMessageProducer';
 import { DatabaseConnection } from './src/infrastructure/database/Connection';
 import { CategoryRepository } from './src/infrastructure/repositories/CategoryRepository';
 import { ChannelRepository } from './src/infrastructure/repositories/ChannelRepository';
@@ -35,6 +36,7 @@ export async function main(): Promise<void> {
   const categoryRepo = new CategoryRepository();
   const channelRepo = new ChannelRepository();
   const channelSubscribeRepo = new ChannelSubscribeRepository();
+  const messageProducer = new KafkaMessageProducer();
 
   const verifyUser = new VerifyUser();
   const saveCategory = new SaveCategory(categoryRepo, channelRepo);
@@ -54,7 +56,10 @@ export async function main(): Promise<void> {
     categoryRepo,
     channelRepo,
   );
-  const saveChannelSubscribe = new SaveChannelSubscribe(channelSubscribeRepo);
+  const saveChannelSubscribe = new SaveChannelSubscribe(
+    channelSubscribeRepo,
+    messageProducer,
+  );
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
