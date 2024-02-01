@@ -13,6 +13,7 @@ import { UpdateCategoryController } from '../presentation/controllers/UpdateCate
 import { DeleteChannelFromCategoryController } from '../presentation/controllers/DeleteChannelFromCategoryController';
 import { GetChannelsController } from '../presentation/controllers/GetChannelsController';
 import { GetCategoriesByChannelController } from '../presentation/controllers/GetCategoriesByChannelController';
+import { SaveChannelSubscribeController } from '../presentation/controllers/SaveChannelSubscribeController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -27,6 +28,7 @@ interface ServerControllers {
   getChannelsByCategoryController: GetChannelsByCategoryController;
   getCategoriesByChannelController: GetCategoriesByChannelController;
   deleteCategoryFromChannelController: DeleteChannelFromCategoryController;
+  saveChannelSubscribeController: SaveChannelSubscribeController;
 }
 
 const corsOptions = {
@@ -61,6 +63,12 @@ export class Server {
         controllers.getChannelsBySearchTermController.handle(req, res);
       });
 
+    app.post('/subscribe', (req, res) => {
+      controllers.saveChannelSubscribeController.handle(req, res);
+    });
+
+    // need admin verification
+
     app
       .get('/category', (req, res) => {
         controllers.getCategoriesController.handle(req, res);
@@ -80,7 +88,6 @@ export class Server {
       controllers.deleteCategoryFromChannelController.handle(req, res);
     });
 
-    // need admin verification
     app.get('/categories', (req, res) => {
       controllers.getCategoriesController.handle(req, res);
     });

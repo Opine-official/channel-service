@@ -7,11 +7,13 @@ import { GetChannelsByCategory } from './src/application/use-cases/GetChannelsBy
 import { GetChannelsBySearchTerm } from './src/application/use-cases/GetChannelsBySearchTerm';
 import { SaveCategory } from './src/application/use-cases/SaveCategory';
 import { SaveChannel } from './src/application/use-cases/SaveChannel';
+import { SaveChannelSubscribe } from './src/application/use-cases/SaveChannelSubscribe';
 import { UpdateCategory } from './src/application/use-cases/UpdateCategory';
 import { VerifyUser } from './src/application/use-cases/VerifyUser';
 import { DatabaseConnection } from './src/infrastructure/database/Connection';
 import { CategoryRepository } from './src/infrastructure/repositories/CategoryRepository';
 import { ChannelRepository } from './src/infrastructure/repositories/ChannelRepository';
+import { ChannelSubscribeRepository } from './src/infrastructure/repositories/ChannelSubscribeRepository';
 import { Server } from './src/infrastructure/Server';
 import run from './src/presentation/consumers/ChannelConsumer';
 import { DeleteChannelFromCategoryController } from './src/presentation/controllers/DeleteChannelFromCategoryController';
@@ -23,6 +25,7 @@ import { GetChannelsByCategoryController } from './src/presentation/controllers/
 import { GetChannelsController } from './src/presentation/controllers/GetChannelsController';
 import { SaveCategoryController } from './src/presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from './src/presentation/controllers/SaveChannelController';
+import { SaveChannelSubscribeController } from './src/presentation/controllers/SaveChannelSubscribeController';
 import { UpdateCategoryController } from './src/presentation/controllers/UpdateCategoryController';
 import { VerifyUserController } from './src/presentation/controllers/VerifyUserController';
 
@@ -31,6 +34,7 @@ export async function main(): Promise<void> {
 
   const categoryRepo = new CategoryRepository();
   const channelRepo = new ChannelRepository();
+  const channelSubscribeRepo = new ChannelSubscribeRepository();
 
   const verifyUser = new VerifyUser();
   const saveCategory = new SaveCategory(categoryRepo, channelRepo);
@@ -50,6 +54,7 @@ export async function main(): Promise<void> {
     categoryRepo,
     channelRepo,
   );
+  const saveChannelSubscribe = new SaveChannelSubscribe(channelSubscribeRepo);
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -70,6 +75,9 @@ export async function main(): Promise<void> {
   );
   const deleteCategoryFromChannelController =
     new DeleteChannelFromCategoryController(deleteCategoryFromChannel);
+  const saveChannelSubscribeController = new SaveChannelSubscribeController(
+    saveChannelSubscribe,
+  );
 
   run();
 
@@ -86,6 +94,7 @@ export async function main(): Promise<void> {
     getChannelsController,
     getCategoriesByChannelController,
     deleteCategoryFromChannelController,
+    saveChannelSubscribeController,
   });
 }
 
