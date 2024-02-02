@@ -28,7 +28,7 @@ import { DeleteChannelFromCategoryController } from './src/presentation/controll
 import { GetCategoriesByChannelController } from './src/presentation/controllers/GetCategoriesByChannelController';
 import { GetCategoriesController } from './src/presentation/controllers/GetCategoriesController';
 import { GetCategoryController } from './src/presentation/controllers/GetCategoryController';
-import { GetChannelsBySearchTermController } from './src/presentation/controllers/GetChannelBySearchTermController';
+import { GetChannelsBySearchTermController } from './src/presentation/controllers/GetChannelsBySearchTermController';
 import { GetChannelsByCategoryController } from './src/presentation/controllers/GetChannelsByCategoryController';
 import { GetChannelsController } from './src/presentation/controllers/GetChannelsController';
 import { GetPostsByChannelController } from './src/presentation/controllers/GetPostsByChannelController';

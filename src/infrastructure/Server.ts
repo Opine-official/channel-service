@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { SaveCategoryController } from '../presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from '../presentation/controllers/SaveChannelController';
 import { authenticateToken } from '@opine-official/authentication';
-import { GetChannelsBySearchTermController } from '../presentation/controllers/GetChannelBySearchTermController';
+import { GetChannelsBySearchTermController } from '../presentation/controllers/GetChannelsBySearchTermController';
 import { GetCategoriesController } from '../presentation/controllers/GetCategoriesController';
 import { GetChannelsByCategoryController } from '../presentation/controllers/GetChannelsByCategoryController';
 import { GetCategoryController } from '../presentation/controllers/GetCategoryController';
