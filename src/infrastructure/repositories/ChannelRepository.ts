@@ -53,23 +53,24 @@ export class ChannelRepository implements IChannelRepository {
 
   public async update(channel: Channel): Promise<void | Error> {
     try {
-      const channelDocument = new ChannelModel({
-        channelId: channel.channelId,
-        name: channel.name,
-        description: channel.description,
-        categories: channel.categories,
-        followerCount: channel.followerCount,
-      });
-
-      await channelDocument.save();
+      await ChannelModel.updateOne(
+        { channelId: channel.channelId },
+        {
+          $set: {
+            name: channel.name,
+            description: channel.description,
+            categories: channel.categories,
+            // followerCount: channel.followerCount, // Commented out as you mentioned you don't want to update followerCount
+          },
+        },
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         return new Error(error.message);
       }
-      return new Error('Something went wrong while updating');
+      return new Error('Something went wrong while updating the channel');
     }
   }
-
   public async delete(channelId: string): Promise<void | Error> {
     try {
       await ChannelModel.deleteOne({

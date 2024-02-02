@@ -16,6 +16,7 @@ import { GetCategoriesByChannelController } from '../presentation/controllers/Ge
 import { SaveChannelSubscribeController } from '../presentation/controllers/SaveChannelSubscribeController';
 import { GetPostsByChannelController } from '../presentation/controllers/GetPostsByChannelController';
 import { DeleteCategoryController } from '../presentation/controllers/DeleteCategoryController';
+import { UpdateChannelController } from '../presentation/controllers/UpdateChannelController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -33,6 +34,7 @@ interface ServerControllers {
   deleteCategoryFromChannelController: DeleteChannelFromCategoryController;
   saveChannelSubscribeController: SaveChannelSubscribeController;
   getPostsByChannelController: GetPostsByChannelController;
+  updateChannelController: UpdateChannelController;
 }
 
 const corsOptions = {
@@ -65,6 +67,9 @@ export class Server {
       })
       .get('/', (req, res) => {
         controllers.getChannelsBySearchTermController.handle(req, res);
+      })
+      .put('/', (req, res) => {
+        controllers.updateChannelController.handle(req, res);
       });
 
     app.post('/subscribe', (req, res) => {

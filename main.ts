@@ -11,6 +11,7 @@ import { SaveCategory } from './src/application/use-cases/SaveCategory';
 import { SaveChannel } from './src/application/use-cases/SaveChannel';
 import { SaveChannelSubscribe } from './src/application/use-cases/SaveChannelSubscribe';
 import { UpdateCategory } from './src/application/use-cases/UpdateCategory';
+import { UpdateChannel } from './src/application/use-cases/UpdateChannel';
 import { VerifyUser } from './src/application/use-cases/VerifyUser';
 import { KafkaMessageProducer } from './src/infrastructure/brokers/kafka/KafkaMessageProducer';
 import { DatabaseConnection } from './src/infrastructure/database/Connection';
@@ -33,6 +34,7 @@ import { SaveCategoryController } from './src/presentation/controllers/SaveCateg
 import { SaveChannelController } from './src/presentation/controllers/SaveChannelController';
 import { SaveChannelSubscribeController } from './src/presentation/controllers/SaveChannelSubscribeController';
 import { UpdateCategoryController } from './src/presentation/controllers/UpdateCategoryController';
+import { UpdateChannelController } from './src/presentation/controllers/UpdateChannelController';
 import { VerifyUserController } from './src/presentation/controllers/VerifyUserController';
 
 export async function main(): Promise<void> {
@@ -68,6 +70,9 @@ export async function main(): Promise<void> {
   );
   const getPostsByChannel = new GetPostsByChannel(postRepo);
   const deleteCategory = new DeleteCategory(categoryRepo);
+  const updateChannel = new UpdateChannel(categoryRepo, channelRepo);
+
+  // * ----------------------------------
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -95,6 +100,7 @@ export async function main(): Promise<void> {
     getPostsByChannel,
   );
   const deleteCategoryController = new DeleteCategoryController(deleteCategory);
+  const updateChannelController = new UpdateChannelController(updateChannel);
 
   run();
 
@@ -114,6 +120,7 @@ export async function main(): Promise<void> {
     saveChannelSubscribeController,
     getPostsByChannelController,
     deleteCategoryController,
+    updateChannelController,
   });
 }
 
