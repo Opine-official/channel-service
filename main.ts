@@ -1,3 +1,4 @@
+import { DeleteCategory } from './src/application/use-cases/DeleteCategory';
 import { DeleteChannelFromCategory } from './src/application/use-cases/DeleteChannelFromCategory';
 import { GetCategories } from './src/application/use-cases/GetCategories';
 import { GetCategoriesByChannel } from './src/application/use-cases/GetCategoriesByChannel';
@@ -19,6 +20,7 @@ import { ChannelSubscribeRepository } from './src/infrastructure/repositories/Ch
 import { PostRepository } from './src/infrastructure/repositories/PostRepository';
 import { Server } from './src/infrastructure/Server';
 import run from './src/presentation/consumers/ChannelConsumer';
+import { DeleteCategoryController } from './src/presentation/controllers/DeleteCategoryController';
 import { DeleteChannelFromCategoryController } from './src/presentation/controllers/DeleteChannelFromCategoryController';
 import { GetCategoriesByChannelController } from './src/presentation/controllers/GetCategoriesByChannelController';
 import { GetCategoriesController } from './src/presentation/controllers/GetCategoriesController';
@@ -65,6 +67,7 @@ export async function main(): Promise<void> {
     messageProducer,
   );
   const getPostsByChannel = new GetPostsByChannel(postRepo);
+  const deleteCategory = new DeleteCategory(categoryRepo);
 
   const verifyUserController = new VerifyUserController(verifyUser);
   const saveCategoryController = new SaveCategoryController(saveCategory);
@@ -91,6 +94,7 @@ export async function main(): Promise<void> {
   const getPostsByChannelController = new GetPostsByChannelController(
     getPostsByChannel,
   );
+  const deleteCategoryController = new DeleteCategoryController(deleteCategory);
 
   run();
 
@@ -109,6 +113,7 @@ export async function main(): Promise<void> {
     deleteCategoryFromChannelController,
     saveChannelSubscribeController,
     getPostsByChannelController,
+    deleteCategoryController,
   });
 }
 

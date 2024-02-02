@@ -15,12 +15,14 @@ import { GetChannelsController } from '../presentation/controllers/GetChannelsCo
 import { GetCategoriesByChannelController } from '../presentation/controllers/GetCategoriesByChannelController';
 import { SaveChannelSubscribeController } from '../presentation/controllers/SaveChannelSubscribeController';
 import { GetPostsByChannelController } from '../presentation/controllers/GetPostsByChannelController';
+import { DeleteCategoryController } from '../presentation/controllers/DeleteCategoryController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
   saveCategoryController: SaveCategoryController;
   getCategoryController: GetCategoryController;
   updateCategoryController: UpdateCategoryController;
+  deleteCategoryController: DeleteCategoryController;
   getChannelsController: GetChannelsController;
   deleteChannelFromCategoryController: DeleteChannelFromCategoryController;
   saveChannelController: SaveChannelController;
@@ -80,6 +82,9 @@ export class Server {
       })
       .put('/category', (req, res) => {
         controllers.updateCategoryController.handle(req, res);
+      })
+      .delete('/category', (req, res) => {
+        controllers.deleteCategoryController.handle(req, res);
       });
 
     app.patch('/categories/remove-channel', (req, res) => {
