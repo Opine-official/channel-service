@@ -1,4 +1,5 @@
 import { DeleteCategory } from './src/application/use-cases/DeleteCategory';
+import { DeleteChannel } from './src/application/use-cases/DeleteChannel';
 import { DeleteChannelFromCategory } from './src/application/use-cases/DeleteChannelFromCategory';
 import { GetCategories } from './src/application/use-cases/GetCategories';
 import { GetCategoriesByChannel } from './src/application/use-cases/GetCategoriesByChannel';
@@ -22,6 +23,7 @@ import { PostRepository } from './src/infrastructure/repositories/PostRepository
 import { Server } from './src/infrastructure/Server';
 import run from './src/presentation/consumers/ChannelConsumer';
 import { DeleteCategoryController } from './src/presentation/controllers/DeleteCategoryController';
+import { DeleteChannelController } from './src/presentation/controllers/DeleteChannelController';
 import { DeleteChannelFromCategoryController } from './src/presentation/controllers/DeleteChannelFromCategoryController';
 import { GetCategoriesByChannelController } from './src/presentation/controllers/GetCategoriesByChannelController';
 import { GetCategoriesController } from './src/presentation/controllers/GetCategoriesController';
@@ -71,6 +73,7 @@ export async function main(): Promise<void> {
   const getPostsByChannel = new GetPostsByChannel(postRepo);
   const deleteCategory = new DeleteCategory(categoryRepo);
   const updateChannel = new UpdateChannel(categoryRepo, channelRepo);
+  const deleteChannel = new DeleteChannel(channelRepo);
 
   // * ----------------------------------
 
@@ -101,6 +104,7 @@ export async function main(): Promise<void> {
   );
   const deleteCategoryController = new DeleteCategoryController(deleteCategory);
   const updateChannelController = new UpdateChannelController(updateChannel);
+  const deleteChannelController = new DeleteChannelController(deleteChannel);
 
   run();
 
@@ -121,6 +125,7 @@ export async function main(): Promise<void> {
     getPostsByChannelController,
     deleteCategoryController,
     updateChannelController,
+    deleteChannelController,
   });
 }
 
