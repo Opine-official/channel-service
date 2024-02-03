@@ -18,6 +18,7 @@ import { GetPostsByChannelController } from '../presentation/controllers/GetPost
 import { DeleteCategoryController } from '../presentation/controllers/DeleteCategoryController';
 import { UpdateChannelController } from '../presentation/controllers/UpdateChannelController';
 import { DeleteChannelController } from '../presentation/controllers/DeleteChannelController';
+import { GetCategoriesBySearchTermController } from '../presentation/controllers/GetCategoriesBySearchTermController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -29,6 +30,7 @@ interface ServerControllers {
   deleteChannelFromCategoryController: DeleteChannelFromCategoryController;
   saveChannelController: SaveChannelController;
   getChannelsBySearchTermController: GetChannelsBySearchTermController;
+  getCategoriesBySearchTermController: GetCategoriesBySearchTermController;
   getCategoriesController: GetCategoriesController;
   getChannelsByCategoryController: GetChannelsByCategoryController;
   getCategoriesByChannelController: GetCategoriesByChannelController;
@@ -76,6 +78,10 @@ export class Server {
       .delete('/', (req, res) => {
         controllers.deleteChannelController.handle(req, res);
       });
+
+    app.get('/search/categories', (req, res) => {
+      controllers.getCategoriesBySearchTermController.handle(req, res);
+    });
 
     app.post('/subscribe', (req, res) => {
       controllers.saveChannelSubscribeController.handle(req, res);

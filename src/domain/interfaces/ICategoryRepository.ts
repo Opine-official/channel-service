@@ -11,6 +11,7 @@ export interface ICategoryRepository {
   update(category: Category): Promise<void | Error>;
   delete(categoryId: string): Promise<void | Error>;
   getCategories(): Promise<Error | Category[]>;
+  getCategoriesBySearchTerm(searchTerm: string): Promise<Category[] | Error>;
   getCategoryIds(categoryIds: string[]): Promise<string[] | Error>;
   getChannelsByCategory(categoryId: string): Promise<ChannelInfo[] | Error>;
   deleteChannelFromCategory(

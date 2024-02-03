@@ -38,6 +38,8 @@ import { SaveChannelSubscribeController } from './src/presentation/controllers/S
 import { UpdateCategoryController } from './src/presentation/controllers/UpdateCategoryController';
 import { UpdateChannelController } from './src/presentation/controllers/UpdateChannelController';
 import { VerifyUserController } from './src/presentation/controllers/VerifyUserController';
+import { GetCategoriesBySearchTerm } from './src/application/use-cases/GetCategoriesBySearchTerm';
+import { GetCategoriesBySearchTermController } from './src/presentation/controllers/GetCategoriesBySearchTermController';
 
 export async function main(): Promise<void> {
   await DatabaseConnection.connect();
@@ -74,6 +76,7 @@ export async function main(): Promise<void> {
   const deleteCategory = new DeleteCategory(categoryRepo);
   const updateChannel = new UpdateChannel(categoryRepo, channelRepo);
   const deleteChannel = new DeleteChannel(channelRepo);
+  const getCategoriesBySearchTerm = new GetCategoriesBySearchTerm(categoryRepo);
 
   // * ----------------------------------
 
@@ -105,6 +108,8 @@ export async function main(): Promise<void> {
   const deleteCategoryController = new DeleteCategoryController(deleteCategory);
   const updateChannelController = new UpdateChannelController(updateChannel);
   const deleteChannelController = new DeleteChannelController(deleteChannel);
+  const getCategoriesBySearchTermController =
+    new GetCategoriesBySearchTermController(getCategoriesBySearchTerm);
 
   run();
 
@@ -126,6 +131,7 @@ export async function main(): Promise<void> {
     deleteCategoryController,
     updateChannelController,
     deleteChannelController,
+    getCategoriesBySearchTermController,
   });
 }
 

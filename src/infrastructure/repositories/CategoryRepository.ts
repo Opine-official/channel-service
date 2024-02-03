@@ -125,6 +125,35 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
+  public async getCategoriesBySearchTerm(
+    searchTerm: string,
+  ): Promise<Category[] | Error> {
+    try {
+      const categories = await CategoryModel.find({
+        name: { $regex: searchTerm, $options: 'i' },
+      }).select('categoryId name description channels followerCount');
+
+      const newCategories = categories.map((category) => {
+        return new Category({
+          categoryId: category.categoryId,
+          name: category.name,
+          description: category.description ?? '',
+          channels: category.channels
+            ? category.channels.map((channel) => channel.toString())
+            : [],
+        });
+      });
+
+      return newCategories;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching categories');
+    }
+  }
+
   public async deleteChannelFromCategory(
     categoryId: string,
     channelId: string,
