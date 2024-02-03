@@ -4,7 +4,10 @@ import { VerifyUserController } from '../presentation/controllers/VerifyUserCont
 import cookieParser from 'cookie-parser';
 import { SaveCategoryController } from '../presentation/controllers/SaveCategoryController';
 import { SaveChannelController } from '../presentation/controllers/SaveChannelController';
-import { authenticateToken } from '@opine-official/authentication';
+import {
+  authenticateToken,
+  authenticateAdmin,
+} from '@opine-official/authentication';
 import { GetChannelsBySearchTermController } from '../presentation/controllers/GetChannelsBySearchTermController';
 import { GetCategoriesController } from '../presentation/controllers/GetCategoriesController';
 import { GetChannelsByCategoryController } from '../presentation/controllers/GetChannelsByCategoryController';
@@ -66,16 +69,16 @@ export class Server {
     });
 
     app
-      .post('/', authenticateToken, (req, res) => {
+      .post('/', authenticateAdmin, (req, res) => {
         controllers.saveChannelController.handle(req, res);
       })
       .get('/', (req, res) => {
         controllers.getChannelsBySearchTermController.handle(req, res);
       })
-      .put('/', (req, res) => {
+      .put('/', authenticateAdmin, (req, res) => {
         controllers.updateChannelController.handle(req, res);
       })
-      .delete('/', (req, res) => {
+      .delete('/', authenticateAdmin, (req, res) => {
         controllers.deleteChannelController.handle(req, res);
       });
 
@@ -83,7 +86,7 @@ export class Server {
       controllers.getCategoriesBySearchTermController.handle(req, res);
     });
 
-    app.post('/subscribe', (req, res) => {
+    app.post('/subscribe', authenticateToken, (req, res) => {
       controllers.saveChannelSubscribeController.handle(req, res);
     });
 
@@ -93,21 +96,21 @@ export class Server {
       .get('/category', (req, res) => {
         controllers.getCategoriesController.handle(req, res);
       })
-      .post('/category', (req, res) => {
+      .post('/category', authenticateAdmin, (req, res) => {
         controllers.saveCategoryController.handle(req, res);
       })
-      .put('/category', (req, res) => {
+      .put('/category', authenticateAdmin, (req, res) => {
         controllers.updateCategoryController.handle(req, res);
       })
-      .delete('/category', (req, res) => {
+      .delete('/category', authenticateAdmin, (req, res) => {
         controllers.deleteCategoryController.handle(req, res);
       });
 
-    app.patch('/categories/remove-channel', (req, res) => {
+    app.patch('/categories/remove-channel', authenticateAdmin, (req, res) => {
       controllers.deleteChannelFromCategoryController.handle(req, res);
     });
 
-    app.patch('/channels/remove-category', (req, res) => {
+    app.patch('/channels/remove-category', authenticateAdmin, (req, res) => {
       controllers.deleteCategoryFromChannelController.handle(req, res);
     });
 
