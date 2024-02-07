@@ -4,4 +4,5 @@ export interface IPostRepository {
   save(post: Post): Promise<void | Error>;
   delete(slug: string): Promise<void | Error>;
   getPostsByChannel(channelName: string): Promise<Post[] | Error>;
+  getPostsByTags(tags: string[]): Promise<Post[] | Error>;
 }

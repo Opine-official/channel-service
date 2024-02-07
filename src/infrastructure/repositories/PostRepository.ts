@@ -63,4 +63,31 @@ export class PostRepository implements IPostRepository {
       return new Error('Something went wrong while getting posts by channel');
     }
   }
+
+  public async getPostsByTags(tags: string[]): Promise<Post[] | Error> {
+    try {
+      const posts = await PostModel.find({ tags: { $in: tags } })
+        .limit(2)
+        .exec();
+
+      if (posts.length === 0) {
+        throw new Error('no posts found');
+      }
+
+      return posts.map((post) => ({
+        postId: post.postId,
+        title: post.title,
+        description: post.description,
+        user: post.user.toString(),
+        tags: post.tags,
+        slug: post.slug,
+      }));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while getting posts by channel');
+    }
+  }
 }
