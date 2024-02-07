@@ -6,7 +6,7 @@ import { Category } from '../../domain/entities/Category';
 import CategoryModel from '../models/CategoryModel';
 
 export class CategoryRepository implements ICategoryRepository {
-  public async save(category: Category): Promise<void | Error> {
+  public async save(category: Category): Promise<string | Error> {
     try {
       const categoryDocument = new CategoryModel({
         categoryId: category.categoryId,
@@ -16,6 +16,7 @@ export class CategoryRepository implements ICategoryRepository {
       });
 
       await categoryDocument.save();
+      return categoryDocument._id.toString();
     } catch (error: unknown) {
       if (error instanceof Error) {
         return new Error(error.message);
@@ -83,6 +84,23 @@ export class CategoryRepository implements ICategoryRepository {
       }
 
       return new Error('Something went wrong while deleting');
+    }
+  }
+
+  public async addChannelToCategory(
+    category_id: string,
+    channel_id: string,
+  ): Promise<void | Error> {
+    try {
+      await CategoryModel.updateOne(
+        { _id: category_id },
+        { $addToSet: { channels: channel_id } },
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+      return new Error('Something went wrong while adding channel to category');
     }
   }
 

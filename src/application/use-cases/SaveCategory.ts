@@ -40,8 +40,8 @@ export class SaveCategory
       return saveCategoryResult;
     }
     const addCategoryToChannels = await Promise.all(
-      category.channels.map((channelId) =>
-        this._channelRepo.addCategoryToChannel(category.categoryId, channelId),
+      category.channels.map((channel_id) =>
+        this._channelRepo.addCategoryToChannel(saveCategoryResult, channel_id),
       ),
     );
 

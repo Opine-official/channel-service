@@ -1,8 +1,8 @@
 import mongoose, { Schema, InferSchemaType, Types } from 'mongoose';
 
 const CategorySchema = new Schema({
-  categoryId: { type: String, required: true },
-  name: { type: String, required: true },
+  categoryId: { type: String, required: true, unique: true },
+  name: { type: String, required: true, unique: true },
   description: { type: String },
   channels: {
     type: [Types.ObjectId],

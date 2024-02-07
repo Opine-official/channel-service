@@ -32,7 +32,7 @@ export class ChannelRepository implements IChannelRepository {
     }
   }
 
-  public async save(channel: Channel): Promise<void | Error> {
+  public async save(channel: Channel): Promise<string | Error> {
     try {
       const channelDocument = new ChannelModel({
         channelId: channel.channelId,
@@ -43,6 +43,8 @@ export class ChannelRepository implements IChannelRepository {
       });
 
       await channelDocument.save();
+
+      return channelDocument._id.toString();
     } catch (error: unknown) {
       if (error instanceof Error) {
         return new Error(error.message);
@@ -59,8 +61,12 @@ export class ChannelRepository implements IChannelRepository {
           $set: {
             name: channel.name,
             description: channel.description,
-            categories: channel.categories,
             // followerCount: channel.followerCount, // Commented out as you mentioned you don't want to update followerCount
+          },
+          $push: {
+            categories: {
+              $each: channel.categories,
+            },
           },
         },
       );
@@ -71,6 +77,7 @@ export class ChannelRepository implements IChannelRepository {
       return new Error('Something went wrong while updating the channel');
     }
   }
+
   public async delete(channelId: string): Promise<void | Error> {
     try {
       await ChannelModel.deleteOne({
@@ -184,13 +191,13 @@ export class ChannelRepository implements IChannelRepository {
   }
 
   public async addCategoryToChannel(
-    channelId: string,
-    categoryId: string,
+    category_id: string,
+    channel_id: string,
   ): Promise<void | Error> {
     try {
       await ChannelModel.updateOne(
-        { channelId: channelId },
-        { $addToSet: { categories: categoryId } },
+        { _id: channel_id },
+        { $addToSet: { categories: category_id } },
       );
     } catch (error: unknown) {
       if (error instanceof Error) {
