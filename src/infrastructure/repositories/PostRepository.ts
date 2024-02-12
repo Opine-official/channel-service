@@ -1,6 +1,11 @@
-import { IPostRepository } from '../../domain/interfaces/IPostRepository';
+import {
+  IPostRepository,
+  PostSearch,
+  User,
+} from '../../domain/interfaces/IPostRepository';
 import { Post } from '../../domain/entities/Post';
 import PostModel from '../models/PostModel';
+// import { User } from '../../domain/entities/User';
 
 export class PostRepository implements IPostRepository {
   public async save(post: Post): Promise<Error | void> {
@@ -64,30 +69,29 @@ export class PostRepository implements IPostRepository {
     }
   }
 
-  public async getPostsByTags(tags: string[]): Promise<Post[] | Error> {
+  public async findByTag(tag: string): Promise<PostSearch[] | Error> {
     try {
-      const posts = await PostModel.find({ tags: { $in: tags } })
-        .limit(2)
-        .exec();
+      const posts = await PostModel.find({ tags: tag }).populate(
+        'user',
+        'name username profile userId',
+      );
 
-      if (posts.length === 0) {
-        throw new Error('no posts found');
-      }
-
-      return posts.map((post) => ({
-        postId: post.postId,
-        title: post.title,
-        description: post.description,
-        user: post.user.toString(),
-        tags: post.tags,
-        slug: post.slug,
+      const result: PostSearch[] = posts.map((post) => ({
+        postId: post.postId!,
+        title: post.title!,
+        description: post.description!,
+        user: post.user as unknown as User,
+        tags: post.tags!,
+        slug: post.slug!,
+        postedOn: post.postedOn!,
       }));
+
+      return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
         return new Error(error.message);
       }
-
-      return new Error('Something went wrong while getting posts by channel');
+      return new Error('Something went wrong while searching posts by tag');
     }
   }
 }

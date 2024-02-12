@@ -5,6 +5,13 @@ export type ChannelInfo = {
   name: string;
 };
 
+export type CategoryWithChannels = {
+  categoryId: string;
+  name: string;
+  description: string;
+  channels: ChannelInfo[];
+};
+
 export interface ICategoryRepository {
   get(categoryId: string): Promise<Category | Error>;
   save(category: Category): Promise<string | Error>;
@@ -23,4 +30,5 @@ export interface ICategoryRepository {
     id: string,
   ): Promise<void | Error>;
   getMongoIdFromCategoryId(categoryId: string): Promise<string | Error>;
+  getAllCategoriesWithChannels(): Promise<Error | CategoryWithChannels[]>;
 }
