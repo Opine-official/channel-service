@@ -82,6 +82,10 @@ export class Server {
         controllers.deleteChannelController.handle(req, res);
       });
 
+    app.get('/search/channels', (req, res) => {
+      controllers.getChannelsBySearchTermController.handle(req, res);
+    });
+
     app.get('/search/categories', (req, res) => {
       controllers.getCategoriesBySearchTermController.handle(req, res);
     });
