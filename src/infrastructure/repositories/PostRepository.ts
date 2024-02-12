@@ -1,6 +1,6 @@
 import {
   IPostRepository,
-  PostSearch,
+  PostResult,
   User,
 } from '../../domain/interfaces/IPostRepository';
 import { Post } from '../../domain/entities/Post';
@@ -42,24 +42,29 @@ export class PostRepository implements IPostRepository {
     }
   }
 
-  public async getPostsByChannel(channelName: string): Promise<Post[] | Error> {
+  public async getPostsByChannel(
+    channelName: string,
+  ): Promise<PostResult[] | Error> {
     try {
       const posts = await PostModel.find({
-        tags: { $in: [channelName] },
-      });
+        tags: { $regex: new RegExp(`^${channelName}$`, 'i') },
+      }).populate('user', 'name username profile userId bio');
 
       if (posts.length === 0) {
         throw new Error('No posts found');
       }
 
-      return posts.map((post) => ({
-        postId: post.postId,
-        title: post.title,
-        description: post.description,
-        user: post.user.toString(),
-        tags: post.tags,
-        slug: post.slug,
+      const result: PostResult[] = posts.map((post) => ({
+        postId: post.postId!,
+        title: post.title!,
+        description: post.description!,
+        user: post.user as unknown as User,
+        tags: post.tags!,
+        slug: post.slug!,
+        postedOn: post.postedOn!,
       }));
+
+      return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
         return new Error(error.message);
@@ -69,14 +74,14 @@ export class PostRepository implements IPostRepository {
     }
   }
 
-  public async findByTag(tag: string): Promise<PostSearch[] | Error> {
+  public async findByTag(tag: string): Promise<PostResult[] | Error> {
     try {
       const posts = await PostModel.find({ tags: tag }).populate(
         'user',
         'name username profile userId',
       );
 
-      const result: PostSearch[] = posts.map((post) => ({
+      const result: PostResult[] = posts.map((post) => ({
         postId: post.postId!,
         title: post.title!,
         description: post.description!,

@@ -1,5 +1,7 @@
-import { Post } from '../../domain/entities/Post';
-import { IPostRepository } from '../../domain/interfaces/IPostRepository';
+import {
+  IPostRepository,
+  PostResult,
+} from '../../domain/interfaces/IPostRepository';
 import { IUseCase } from '../../shared/interfaces/IUseCase';
 
 interface IGetPostsByChannelDTO {
@@ -7,7 +9,7 @@ interface IGetPostsByChannelDTO {
 }
 
 interface IGetPostsByChannelResults {
-  posts: Post[];
+  posts: PostResult[];
 }
 
 export class GetPostsByChannel

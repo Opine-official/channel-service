@@ -5,9 +5,10 @@ export interface User {
   username: string;
   profile: string;
   userId: string;
+  bio: string;
 }
 
-export interface PostSearch {
+export interface PostResult {
   postId: string;
   title: string;
   description: string;
@@ -20,5 +21,5 @@ export interface PostSearch {
 export interface IPostRepository {
   save(post: Post): Promise<void | Error>;
   delete(slug: string): Promise<void | Error>;
-  getPostsByChannel(channelName: string): Promise<Post[] | Error>;
+  getPostsByChannel(channelName: string): Promise<PostResult[] | Error>;
 }
