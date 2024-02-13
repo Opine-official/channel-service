@@ -11,6 +11,7 @@ export interface IChannelRepository {
   update(channel: Channel): Promise<void | Error>;
   delete(channelId: string): Promise<void | Error>;
   getChannels(): Promise<Error | Channel[]>;
+  getChannelIdFromName(channelName: string): Promise<string | Error>;
   getChannelIds(channelIds: string[]): Promise<string[] | Error>;
   getCategoriesByChannel(channelId: string): Promise<CategoryInfo[] | Error>;
   getChannelsBySearchTerm(searchTerm: string): Promise<Channel[] | Error>;

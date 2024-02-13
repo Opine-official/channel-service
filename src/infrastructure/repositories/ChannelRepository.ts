@@ -228,6 +228,29 @@ export class ChannelRepository implements IChannelRepository {
     }
   }
 
+  public async getChannelIdFromName(
+    channelName: string,
+  ): Promise<string | Error> {
+    try {
+      const channel = await ChannelModel.findOne(
+        { name: channelName },
+        { channelId: 1, _id: 0 },
+      );
+
+      if (!channel) {
+        throw new Error('Channel not found');
+      }
+
+      return channel.channelId;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching channels');
+    }
+  }
+
   public async getMongoIdFromChannelId(
     channelId: string,
   ): Promise<string | Error> {

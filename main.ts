@@ -40,6 +40,8 @@ import { UpdateChannelController } from './src/presentation/controllers/UpdateCh
 import { VerifyUserController } from './src/presentation/controllers/VerifyUserController';
 import { GetCategoriesBySearchTerm } from './src/application/use-cases/GetCategoriesBySearchTerm';
 import { GetCategoriesBySearchTermController } from './src/presentation/controllers/GetCategoriesBySearchTermController';
+import { GetChannel } from './src/application/use-cases/GetChannel';
+import { GetChannelController } from './src/presentation/controllers/GetChannelController';
 
 export async function main(): Promise<void> {
   await DatabaseConnection.connect();
@@ -74,6 +76,7 @@ export async function main(): Promise<void> {
   );
   const getPostsByChannel = new GetPostsByChannel(postRepo);
   const deleteCategory = new DeleteCategory(categoryRepo);
+  const getChannel = new GetChannel(channelRepo);
   const updateChannel = new UpdateChannel(categoryRepo, channelRepo);
   const deleteChannel = new DeleteChannel(channelRepo);
   const getCategoriesBySearchTerm = new GetCategoriesBySearchTerm(categoryRepo);
@@ -106,6 +109,7 @@ export async function main(): Promise<void> {
     getPostsByChannel,
   );
   const deleteCategoryController = new DeleteCategoryController(deleteCategory);
+  const getChannelController = new GetChannelController(getChannel);
   const updateChannelController = new UpdateChannelController(updateChannel);
   const deleteChannelController = new DeleteChannelController(deleteChannel);
   const getCategoriesBySearchTermController =
@@ -132,6 +136,7 @@ export async function main(): Promise<void> {
     updateChannelController,
     deleteChannelController,
     getCategoriesBySearchTermController,
+    getChannelController,
   });
 }
 

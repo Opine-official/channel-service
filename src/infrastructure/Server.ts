@@ -22,6 +22,7 @@ import { DeleteCategoryController } from '../presentation/controllers/DeleteCate
 import { UpdateChannelController } from '../presentation/controllers/UpdateChannelController';
 import { DeleteChannelController } from '../presentation/controllers/DeleteChannelController';
 import { GetCategoriesBySearchTermController } from '../presentation/controllers/GetCategoriesBySearchTermController';
+import { GetChannelController } from '../presentation/controllers/GetChannelController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -42,6 +43,7 @@ interface ServerControllers {
   getPostsByChannelController: GetPostsByChannelController;
   updateChannelController: UpdateChannelController;
   deleteChannelController: DeleteChannelController;
+  getChannelController: GetChannelController;
 }
 
 const corsOptions = {
@@ -73,7 +75,7 @@ export class Server {
         controllers.saveChannelController.handle(req, res);
       })
       .get('/', (req, res) => {
-        controllers.getChannelsBySearchTermController.handle(req, res);
+        controllers.getChannelController.handle(req, res);
       })
       .put('/', authenticateAdmin, (req, res) => {
         controllers.updateChannelController.handle(req, res);
