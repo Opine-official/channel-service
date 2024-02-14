@@ -111,6 +111,27 @@ export class ChannelRepository implements IChannelRepository {
     }
   }
 
+  public async decrementSubscriberCount(
+    channelId: string,
+  ): Promise<void | Error> {
+    try {
+      await ChannelModel.updateOne(
+        {
+          channelId: channelId,
+        },
+        {
+          $inc: {
+            subscriberCount: -1,
+          },
+        },
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+    }
+  }
+
   public async getChannels(): Promise<Error | Channel[]> {
     try {
       const channels = await ChannelModel.find();

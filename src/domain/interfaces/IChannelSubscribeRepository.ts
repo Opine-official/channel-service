@@ -9,4 +9,8 @@ export interface IChannelSubscribeRepository {
     userId: string | null,
     channelId: string,
   ): Promise<Error | boolean>;
+  getChannelSubscribeId(
+    userId: string,
+    channelId: string,
+  ): Promise<Error | string>;
 }

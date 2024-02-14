@@ -108,4 +108,29 @@ export class ChannelSubscribeRepository implements IChannelSubscribeRepository {
       return new Error('Something went wrong while checking');
     }
   }
+
+  public async getChannelSubscribeId(
+    userId: string,
+    channelId: string,
+  ): Promise<Error | string> {
+    try {
+      const channelSubscribeDocument = await ChannelSubscribeModel.findOne({
+        userId: userId,
+        channelId: channelId,
+      });
+
+      if (!channelSubscribeDocument) {
+        throw new Error('ChannelSubscribe not found');
+      }
+
+      return channelSubscribeDocument.channelSubscribeId;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+      return new Error(
+        'Something went wrong while getting ChannelSubscribe id',
+      );
+    }
+  }
 }

@@ -23,6 +23,7 @@ import { UpdateChannelController } from '../presentation/controllers/UpdateChann
 import { DeleteChannelController } from '../presentation/controllers/DeleteChannelController';
 import { GetCategoriesBySearchTermController } from '../presentation/controllers/GetCategoriesBySearchTermController';
 import { GetChannelController } from '../presentation/controllers/GetChannelController';
+import { DeleteChannelSubscribeController } from '../presentation/controllers/DeleteChannelSubscribeController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -40,6 +41,7 @@ interface ServerControllers {
   getCategoriesByChannelController: GetCategoriesByChannelController;
   deleteCategoryFromChannelController: DeleteChannelFromCategoryController;
   saveChannelSubscribeController: SaveChannelSubscribeController;
+  deleteChannelSubscribeController: DeleteChannelSubscribeController;
   getPostsByChannelController: GetPostsByChannelController;
   updateChannelController: UpdateChannelController;
   deleteChannelController: DeleteChannelController;
@@ -92,9 +94,13 @@ export class Server {
       controllers.getCategoriesBySearchTermController.handle(req, res);
     });
 
-    app.post('/subscribe', authenticateToken, (req, res) => {
-      controllers.saveChannelSubscribeController.handle(req, res);
-    });
+    app
+      .post('/subscribe', authenticateToken, (req, res) => {
+        controllers.saveChannelSubscribeController.handle(req, res);
+      })
+      .delete('/subscribe', authenticateToken, (req, res) => {
+        controllers.deleteChannelSubscribeController.handle(req, res);
+      });
 
     // need admin verification
 

@@ -42,6 +42,8 @@ import { GetCategoriesBySearchTerm } from './src/application/use-cases/GetCatego
 import { GetCategoriesBySearchTermController } from './src/presentation/controllers/GetCategoriesBySearchTermController';
 import { GetChannel } from './src/application/use-cases/GetChannel';
 import { GetChannelController } from './src/presentation/controllers/GetChannelController';
+import { DeleteChannelSubscribe } from './src/application/use-cases/DeleteChannelSubscribe';
+import { DeleteChannelSubscribeController } from './src/presentation/controllers/DeleteChannelSubscribeController';
 
 export async function main(): Promise<void> {
   await DatabaseConnection.connect();
@@ -71,6 +73,11 @@ export async function main(): Promise<void> {
     channelRepo,
   );
   const saveChannelSubscribe = new SaveChannelSubscribe(
+    channelSubscribeRepo,
+    channelRepo,
+    messageProducer,
+  );
+  const deleteChannelSubscribe = new DeleteChannelSubscribe(
     channelSubscribeRepo,
     channelRepo,
     messageProducer,
@@ -115,6 +122,9 @@ export async function main(): Promise<void> {
   const deleteChannelController = new DeleteChannelController(deleteChannel);
   const getCategoriesBySearchTermController =
     new GetCategoriesBySearchTermController(getCategoriesBySearchTerm);
+  const deleteChannelSubscribeController = new DeleteChannelSubscribeController(
+    deleteChannelSubscribe,
+  );
 
   run();
 
@@ -138,6 +148,7 @@ export async function main(): Promise<void> {
     deleteChannelController,
     getCategoriesBySearchTermController,
     getChannelController,
+    deleteChannelSubscribeController,
   });
 }
 
