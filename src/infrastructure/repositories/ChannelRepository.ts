@@ -92,6 +92,25 @@ export class ChannelRepository implements IChannelRepository {
     }
   }
 
+  public async incrementSubscriberCount(
+    channelId: string,
+  ): Promise<void | Error> {
+    try {
+      await ChannelModel.updateOne(
+        { channelId: channelId },
+        { $inc: { subscriberCount: 1 } },
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error(
+        'Something went wrong while incrementing subscriber count',
+      );
+    }
+  }
+
   public async getChannels(): Promise<Error | Channel[]> {
     try {
       const channels = await ChannelModel.find();

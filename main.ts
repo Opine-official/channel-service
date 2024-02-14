@@ -72,6 +72,7 @@ export async function main(): Promise<void> {
   );
   const saveChannelSubscribe = new SaveChannelSubscribe(
     channelSubscribeRepo,
+    channelRepo,
     messageProducer,
   );
   const getPostsByChannel = new GetPostsByChannel(postRepo);

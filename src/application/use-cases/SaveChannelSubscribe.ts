@@ -1,4 +1,5 @@
 import { ChannelSubscribe } from '../../domain/entities/ChannelSubscribe';
+import { IChannelRepository } from '../../domain/interfaces/IChannelRepository';
 import { IChannelSubscribeRepository } from '../../domain/interfaces/IChannelSubscribeRepository';
 import { IMessageProducer } from '../../domain/interfaces/IMessageProducer';
 import { IUseCase } from '../../shared/interfaces/IUseCase';
@@ -18,6 +19,7 @@ export class SaveChannelSubscribe
 {
   constructor(
     private readonly _channelSubRepo: IChannelSubscribeRepository,
+    private readonly _channelRepo: IChannelRepository,
     private readonly _messageProducer: IMessageProducer,
   ) {}
 
@@ -36,6 +38,13 @@ export class SaveChannelSubscribe
 
     if (result instanceof Error) {
       return result;
+    }
+
+    const updateSubscriberCountResult =
+      await this._channelRepo.incrementSubscriberCount(channelId);
+
+    if (updateSubscriberCountResult instanceof Error) {
+      return updateSubscriberCountResult;
     }
 
     const kafkaResult = await this._messageProducer.sendToTopic(

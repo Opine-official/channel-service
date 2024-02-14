@@ -10,6 +10,7 @@ export interface IChannelRepository {
   save(channel: Channel): Promise<string | Error>;
   update(channel: Channel): Promise<void | Error>;
   delete(channelId: string): Promise<void | Error>;
+  incrementSubscriberCount(channelId: string): Promise<void | Error>;
   getChannels(): Promise<Error | Channel[]>;
   getChannelIdFromName(channelName: string): Promise<string | Error>;
   getChannelIds(channelIds: string[]): Promise<string[] | Error>;
