@@ -22,7 +22,7 @@ export class ChannelRepository implements IChannelRepository {
         description: channelDocument.description ?? '',
         categories:
           channelDocument.categories.map((cat) => cat.toString()) ?? [],
-        followerCount: channelDocument.followerCount,
+        subscriberCount: channelDocument.subscriberCount,
       };
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -39,7 +39,7 @@ export class ChannelRepository implements IChannelRepository {
         name: channel.name,
         description: channel.description,
         categories: channel.categories,
-        followerCount: channel.followerCount,
+        subscriberCount: channel.subscriberCount,
       });
 
       await channelDocument.save();
@@ -61,7 +61,7 @@ export class ChannelRepository implements IChannelRepository {
           $set: {
             name: channel.name,
             description: channel.description,
-            // followerCount: channel.followerCount, // Commented out as you mentioned you don't want to update followerCount
+            // subscriberCount: channel.subscriberCount, // Commented out as you mentioned you don't want to update subscriberCount
           },
           $push: {
             categories: {
@@ -103,7 +103,7 @@ export class ChannelRepository implements IChannelRepository {
         categories: channel.categories
           ? channel.categories.map((category) => category.toString())
           : [],
-        followerCount: channel.followerCount,
+        subscriberCount: channel.subscriberCount,
       }));
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -166,7 +166,7 @@ export class ChannelRepository implements IChannelRepository {
     try {
       const channels = await ChannelModel.find({
         name: { $regex: searchTerm, $options: 'i' },
-      }).select('channelId name description categories followerCount');
+      }).select('channelId name description categories subscriberCount');
 
       const newChannels = channels.map((channel) => {
         return new Channel({
@@ -176,7 +176,7 @@ export class ChannelRepository implements IChannelRepository {
           categories: channel.categories
             ? channel.categories.map((category) => category.toString())
             : [],
-          followerCount: channel.followerCount,
+          subscriberCount: channel.subscriberCount,
         });
       });
 
@@ -233,7 +233,7 @@ export class ChannelRepository implements IChannelRepository {
   ): Promise<string | Error> {
     try {
       const channel = await ChannelModel.findOne(
-        { name: channelName },
+        { name: { $regex: new RegExp(`^${channelName}$`, 'i') } },
         { channelId: 1, _id: 0 },
       );
 

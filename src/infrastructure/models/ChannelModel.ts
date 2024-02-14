@@ -7,7 +7,7 @@ const ChannelSchema = new Schema({
   categories: {
     type: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
   },
-  followerCount: {
+  subscriberCount: {
     type: Number,
     default: 0,
     required: true,

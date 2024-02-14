@@ -150,7 +150,7 @@ export class CategoryRepository implements ICategoryRepository {
     try {
       const categories = await CategoryModel.find({
         name: { $regex: searchTerm, $options: 'i' },
-      }).select('categoryId name description channels followerCount');
+      }).select('categoryId name description channels subscriberCount');
 
       const newCategories = categories.map((category) => {
         return new Category({

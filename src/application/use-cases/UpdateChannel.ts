@@ -37,7 +37,7 @@ export class UpdateChannel
       name: input.name,
       description: input.description,
       categories: categoryIds,
-      followerCount: 0, // not used
+      subscriberCount: 0, // not used
     });
 
     if (updateChannelResult instanceof Error) {

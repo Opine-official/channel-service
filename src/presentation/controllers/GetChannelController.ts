@@ -9,7 +9,7 @@ export class GetChannelController implements IController {
     const channelName = req.query.channelName;
 
     if (!channelName || typeof channelName !== 'string') {
-      res.status(400).json({ error: 'Invalid slug' });
+      res.status(400).json({ error: 'Invalid channel name' });
       return;
     }
 

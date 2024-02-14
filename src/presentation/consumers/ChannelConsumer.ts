@@ -67,7 +67,7 @@ const run = async () => {
             description: '',
             categories: [],
             similar: [],
-            followerCount: 0,
+            subscriberCount: 0,
           };
 
           const saveChannelResult = await saveChannel.execute(channelData);
