@@ -81,4 +81,31 @@ export class ChannelSubscribeRepository implements IChannelSubscribeRepository {
       return new Error('Something went wrong while deleting');
     }
   }
+
+  public async isSubscribed(
+    userId: string | null,
+    channelId: string,
+  ): Promise<Error | boolean> {
+    try {
+      if (!userId) {
+        throw new Error('User not found');
+      }
+
+      const channelSubscribeDocument = await ChannelSubscribeModel.findOne({
+        userId: userId,
+        channelId: channelId,
+      });
+
+      if (!channelSubscribeDocument) {
+        return false;
+      }
+
+      return true;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+      return new Error('Something went wrong while checking');
+    }
+  }
 }

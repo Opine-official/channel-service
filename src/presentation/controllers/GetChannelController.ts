@@ -7,6 +7,7 @@ export class GetChannelController implements IController {
 
   public async handle(req: Request, res: Response): Promise<void> {
     const channelName = req.query.channelName;
+    const userId = req.query.userId;
 
     if (!channelName || typeof channelName !== 'string') {
       res.status(400).json({ error: 'Invalid channel name' });
@@ -15,6 +16,7 @@ export class GetChannelController implements IController {
 
     const result = await this._useCase.execute({
       channelName,
+      userId: userId ? String(userId) : null,
     });
 
     if (result instanceof Error) {

@@ -5,4 +5,8 @@ export interface IChannelSubscribeRepository {
   save(channelSubscribe: ChannelSubscribe): Promise<void | Error>;
   update(channelSubscribe: ChannelSubscribe): Promise<void | Error>;
   delete(channelSubscribeId: string): Promise<void | Error>;
+  isSubscribed(
+    userId: string | null,
+    channelId: string,
+  ): Promise<Error | boolean>;
 }

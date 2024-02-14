@@ -77,7 +77,7 @@ export async function main(): Promise<void> {
   );
   const getPostsByChannel = new GetPostsByChannel(postRepo);
   const deleteCategory = new DeleteCategory(categoryRepo);
-  const getChannel = new GetChannel(channelRepo);
+  const getChannel = new GetChannel(channelRepo, channelSubscribeRepo);
   const updateChannel = new UpdateChannel(categoryRepo, channelRepo);
   const deleteChannel = new DeleteChannel(channelRepo);
   const getCategoriesBySearchTerm = new GetCategoriesBySearchTerm(categoryRepo);
