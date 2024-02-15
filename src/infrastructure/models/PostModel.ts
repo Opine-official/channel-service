@@ -13,7 +13,7 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  postedOn: { type: Date, required: false },
+  postedOn: { type: Date, required: true },
 });
 
 function arrayLimit(val: string[]): boolean {

@@ -10,6 +10,7 @@ interface ISavePostDTO {
   user: string;
   tags: string[];
   slug: string;
+  createdAt: Date;
 }
 
 interface ISavePostResult {
@@ -36,10 +37,11 @@ class SavePost implements IUseCase<ISavePostDTO, ISavePostResult> {
       user: mongoId,
       tags: input.tags,
       slug: input.slug,
+      postedOn: input.createdAt,
     };
 
-    const post = new Post(input);
-    const savePostResult = await this._postRepo.save(postData);
+    const post = new Post(postData);
+    const savePostResult = await this._postRepo.save(post);
 
     if (savePostResult instanceof Error) {
       return savePostResult;

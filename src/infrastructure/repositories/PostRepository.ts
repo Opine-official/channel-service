@@ -17,6 +17,7 @@ export class PostRepository implements IPostRepository {
         user: post.user,
         tags: post.tags,
         slug: post.slug,
+        postedOn: post.postedOn,
       });
 
       await postDocument.save();
@@ -48,7 +49,9 @@ export class PostRepository implements IPostRepository {
     try {
       const posts = await PostModel.find({
         tags: { $regex: new RegExp(`^${channelName}$`, 'i') },
-      }).populate('user', 'name username profile userId bio');
+      })
+        .populate('user', 'name username profile userId bio')
+        .sort({ postedOn: -1 });
 
       if (posts.length === 0) {
         throw new Error('No posts found');

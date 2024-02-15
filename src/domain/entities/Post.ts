@@ -5,6 +5,7 @@ type PostParams = {
   user: string;
   tags: string[];
   slug: string;
+  postedOn: Date;
 };
 
 export class Post {
@@ -14,6 +15,7 @@ export class Post {
   user: string;
   tags: string[];
   slug: string;
+  postedOn: Date;
 
   constructor(params: PostParams) {
     this.postId = params.postId;
@@ -22,5 +24,6 @@ export class Post {
     this.user = params.user;
     this.tags = params.tags;
     this.slug = params.slug;
+    this.postedOn = params.postedOn;
   }
 }
