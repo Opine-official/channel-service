@@ -310,4 +310,28 @@ export class ChannelRepository implements IChannelRepository {
       return new Error('Something went wrong while fetching channels');
     }
   }
+
+  public async topChannels(): Promise<Channel[] | Error> {
+    try {
+      const channels = await ChannelModel.find()
+        .sort({ subscriberCount: -1 })
+        .limit(5);
+
+      return channels.map((channel) => ({
+        channelId: channel.channelId,
+        name: channel.name,
+        description: channel.description ?? '',
+        categories: channel.categories
+          ? channel.categories.map((category) => category.toString())
+          : [],
+        subscriberCount: channel.subscriberCount,
+      }));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return new Error(error.message);
+      }
+
+      return new Error('Something went wrong while fetching channels');
+    }
+  }
 }

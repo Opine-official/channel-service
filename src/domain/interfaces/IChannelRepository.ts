@@ -26,4 +26,5 @@ export interface IChannelRepository {
     categoryId: string,
   ): Promise<void | Error>;
   getMongoIdFromChannelId(channelId: string): Promise<string | Error>;
+  topChannels(): Promise<Channel[] | Error>;
 }

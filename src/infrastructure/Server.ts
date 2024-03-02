@@ -24,6 +24,7 @@ import { DeleteChannelController } from '../presentation/controllers/DeleteChann
 import { GetCategoriesBySearchTermController } from '../presentation/controllers/GetCategoriesBySearchTermController';
 import { GetChannelController } from '../presentation/controllers/GetChannelController';
 import { DeleteChannelSubscribeController } from '../presentation/controllers/DeleteChannelSubscribeController';
+import { GetTopChannelsController } from '../presentation/controllers/GetTopChannelsController';
 
 interface ServerControllers {
   verifyUserController: VerifyUserController;
@@ -46,6 +47,7 @@ interface ServerControllers {
   updateChannelController: UpdateChannelController;
   deleteChannelController: DeleteChannelController;
   getChannelController: GetChannelController;
+  getTopChannelsController: GetTopChannelsController;
 }
 
 const corsOptions = {
@@ -132,6 +134,10 @@ export class Server {
 
     app.get('/channels', (req, res) => {
       controllers.getChannelsController.handle(req, res);
+    });
+
+    app.get('/topChannels', (req, res) => {
+      controllers.getTopChannelsController.handle(req, res);
     });
 
     app.get('/channelsByCategory', (req, res) => {

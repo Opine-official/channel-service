@@ -44,6 +44,8 @@ import { GetChannel } from './src/application/use-cases/GetChannel';
 import { GetChannelController } from './src/presentation/controllers/GetChannelController';
 import { DeleteChannelSubscribe } from './src/application/use-cases/DeleteChannelSubscribe';
 import { DeleteChannelSubscribeController } from './src/presentation/controllers/DeleteChannelSubscribeController';
+import { GetTopChannels } from './src/application/use-cases/GetTopChannels';
+import { GetTopChannelsController } from './src/presentation/controllers/GetTopChannelsController';
 
 export async function main(): Promise<void> {
   await DatabaseConnection.connect();
@@ -88,6 +90,7 @@ export async function main(): Promise<void> {
   const updateChannel = new UpdateChannel(categoryRepo, channelRepo);
   const deleteChannel = new DeleteChannel(channelRepo);
   const getCategoriesBySearchTerm = new GetCategoriesBySearchTerm(categoryRepo);
+  const getTopChannel = new GetTopChannels(channelRepo);
 
   // * ----------------------------------
 
@@ -125,6 +128,7 @@ export async function main(): Promise<void> {
   const deleteChannelSubscribeController = new DeleteChannelSubscribeController(
     deleteChannelSubscribe,
   );
+  const getTopChannelsController = new GetTopChannelsController(getTopChannel);
 
   run();
 
@@ -149,6 +153,7 @@ export async function main(): Promise<void> {
     getCategoriesBySearchTermController,
     getChannelController,
     deleteChannelSubscribeController,
+    getTopChannelsController,
   });
 }
 
