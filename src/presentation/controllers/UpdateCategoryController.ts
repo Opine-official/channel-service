@@ -1,15 +1,16 @@
 import { Request, Response } from 'express';
 import { IController } from '../../shared/interfaces/IController';
-import { SaveChannel } from '../../application/use-cases/SaveChannel';
+import { UpdateCategory } from '../../application/use-cases/UpdateCategory';
 
-export class SaveChannelController implements IController {
-  public constructor(private readonly _useCase: SaveChannel) {}
+export class UpdateCategoryController implements IController {
+  public constructor(private readonly _useCase: UpdateCategory) {}
 
   public async handle(req: Request, res: Response): Promise<void> {
     const result = await this._useCase.execute({
+      categoryId: req.body.categoryId,
       name: req.body.name,
       description: req.body.description,
-      categories: req.body.categories,
+      channels: req.body.channels,
     });
 
     if (result instanceof Error) {
@@ -19,8 +20,8 @@ export class SaveChannelController implements IController {
     }
 
     res.status(200).send({
-      message: 'Channel saved successfully',
-      channelId: result.channelId,
+      message: 'Category updated successfully',
+      categoryId: result.categoryId,
     });
   }
 }

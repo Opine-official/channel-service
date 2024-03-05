@@ -5,8 +5,7 @@ type ChannelParams = {
   name: string;
   description?: string;
   categories: string[];
-  similar: string[];
-  followerCount: number;
+  subscriberCount?: number;
 };
 
 export class Channel {
@@ -14,15 +13,13 @@ export class Channel {
   name: string;
   description: string;
   categories: string[];
-  similar: string[];
-  followerCount: number;
+  subscriberCount: number;
 
   constructor(params: ChannelParams) {
     this.channelId = params.channelId || randomUUID();
     this.name = params.name;
     this.description = params.description || '';
     this.categories = params.categories || [];
-    this.similar = params.similar || [];
-    this.followerCount = params.followerCount;
+    this.subscriberCount = params.subscriberCount || 0;
   }
 }

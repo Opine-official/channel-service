@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
 import { IController } from '../../shared/interfaces/IController';
-import { SaveChannel } from '../../application/use-cases/SaveChannel';
+import { DeleteCategoryFromChannel } from '../../application/use-cases/DeleteCategoryFromChannel';
 
-export class SaveChannelController implements IController {
-  public constructor(private readonly _useCase: SaveChannel) {}
+export class DeleteCategoryFromChannelController implements IController {
+  public constructor(private readonly _useCase: DeleteCategoryFromChannel) {}
 
   public async handle(req: Request, res: Response): Promise<void> {
     const result = await this._useCase.execute({
-      name: req.body.name,
-      description: req.body.description,
-      categories: req.body.categories,
+      categoryId: req.body.categoryId,
+      channelId: req.body.channelId,
     });
 
     if (result instanceof Error) {
@@ -19,7 +18,8 @@ export class SaveChannelController implements IController {
     }
 
     res.status(200).send({
-      message: 'Channel saved successfully',
+      message: 'Category deleted from channel successfully',
+      categoryId: result.categoryId,
       channelId: result.channelId,
     });
   }
